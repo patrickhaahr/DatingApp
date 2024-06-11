@@ -1,10 +1,30 @@
-﻿<div class="flex justify-between items-center p-4 bg-black shadow-md text-white">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
+
+
+<div class="flex justify-between items-center p-4 bg-black shadow-md text-white">
     <a href="/" class="text-2xl font-bold text-white">DATINGAPP</a>
-    <nav class="flex space-x-4">
-        <a href="/accounts/create" class="text-white font-medium hover:underline">Create</a>
-        <a href="/accounts" class="text-white font-medium hover:underline">Index</a>
-    </nav>
-    <div class="flex items-center space-x-4">
-        <button class="border-2 border-white text-white px-4 py-2 rounded-full">Log in</button>
-    </div>
+    <AuthorizeView Roles="Administrator">
+        <Authorized>
+            <nav class="flex space-x-4">
+                <a href="accounts/create" class="text-white font-medium hover:underline">Create</a>
+                <a href="accounts" class="text-white font-medium hover:underline">Index</a>
+            </nav>
+        </Authorized>
+    </AuthorizeView>
+    <AuthorizeView Roles="Administrator, User">
+        <Authorized>
+            <NavLink class="nav-link" href="counter">
+                <span class="flex space-x-4" aria-hidden="true"></span> Counter
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+    <AuthorizeView>
+        <Authorized>
+            <a href="Accounts/Logout" class="text-white font-medium hover:underline">Logout</a>
+        </Authorized>
+        <NotAuthorized>
+            <a href="Accounts/Login" class="text-white font-medium hover:underline">Login</a>
+        </NotAuthorized>
+     </AuthorizeView>
 </div>

@@ -14,13 +14,13 @@ namespace BlazorApp.Models
         [MaxLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
         [MinLength(2, ErrorMessage = "First name must be at least 2 characters long.")]
         [Column(TypeName = "nvarchar(50)")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [Required(ErrorMessage = "Last name is required.")]
         [MaxLength(50, ErrorMessage = "Last name cannot be longer than 50 characters.")]
         [MinLength(2, ErrorMessage = "Last name must be at least 2 characters long.")]
         [Column(TypeName = "nvarchar(50)")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Required(ErrorMessage = "You must specify a birth date.")]
         [DataType(DataType.Date)]
@@ -31,7 +31,7 @@ namespace BlazorApp.Models
         [MaxLength(50, ErrorMessage = "Username cannot be longer than 50 characters.")]
         [MinLength(2, ErrorMessage = "Username must be at least 2 characters long.")]
         [Column(TypeName = "nvarchar(50)")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
@@ -39,14 +39,14 @@ namespace BlazorApp.Models
         [MaxLength(50, ErrorMessage = "Email cannot be longer than 50 characters.")]
         [MinLength(2, ErrorMessage = "Email must be at least 2 characters long.")]
         [Column(TypeName = "nvarchar(50)")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required(ErrorMessage = "Password is required.")]
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
         [MaxLength(50, ErrorMessage = "Password cannot be longer than 50 characters.")]
         [PasswordValidation]
         [Column(TypeName = "nvarchar(50)")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [HiddenInput(DisplayValue = false)]
         public DateTime CreateDate { get; set; } = DateTime.Now;

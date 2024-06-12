@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Components\Pages\AccountPages\AccessDenied.razor" />
+    <Compile Remove="wwwroot\images\upload\**" />
+    <Content Remove="wwwroot\images\upload\**" />
+    <EmbeddedResource Remove="wwwroot\images\upload\**" />
+    <None Remove="wwwroot\images\upload\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\" />
+    <Content Remove="Components\Pages\AccountPages\AccessDenied.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +44,10 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Components\Pages\AccountPages\AccessDenied.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\uploads\" />
   </ItemGroup>
 
 </Project>

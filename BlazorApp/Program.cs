@@ -13,6 +13,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
+        options.Cookie.Name = "auth_token";
+        options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
         options.LoginPath = "/Accounts/Login";
         options.AccessDeniedPath = "/Accounts/AccessDenied";
     });
@@ -30,7 +32,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

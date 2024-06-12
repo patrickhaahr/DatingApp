@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Components\Pages\AccountPages\LoginBACKUP.razor" />
+    <Content Remove="Components\Pages\AccountPages\AccessDenied.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +32,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Components\Pages\AccountPages\LoginBACKUP.razor" />
+    <None Include="Components\Pages\AccountPages\AccessDenied.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\AccountPages\AccessDenied.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\AccountPages\AccessDenied.razor" />
   </ItemGroup>
 
 </Project>

@@ -85,7 +85,7 @@ namespace BlazorApp.Migrations
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Pic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NickName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<bool>(type: "bit", nullable: false)
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

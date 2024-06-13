@@ -19,6 +19,11 @@ namespace BlazorApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Account>()
+                .HasOne(a => a.Profile)
+                .WithOne(p => p.Account)
+                .HasForeignKey<Profile>(p => p.AccountId);
+
             // Configure primary key of City not to be an identity column
             modelBuilder.Entity<City>()
             .Property(c => c.CityId)
@@ -62,6 +67,8 @@ namespace BlazorApp.Data
                 .WithMany(a => a.ReceivedMessages)
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

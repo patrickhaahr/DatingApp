@@ -3,59 +3,55 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using BlazorApp.Models
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject ProfileService ProfileService
-@inject NavigationManager Navigation
 @inject BlazorApp.Data.DatingAppDbContext DB
+@using Microsoft.EntityFrameworkCore
+@inject AccountService AccountService
+@inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@rendermode InteractiveServer
 
-<EditForm Model="profile" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@Profile" OnValidSubmit="@AddProfile">
+    <Antiforgery />
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <InputText @bind-Value="profile.NickName" placeholder="NickName" />
-    <InputNumber @bind-Value="profile.Height" placeholder="Height" />
-    <InputNumber @bind-Value="profile.Weight" placeholder="Weight" />
-    <InputDate @bind-Value="profile.BirthDate" placeholder="Birth Date" />
-    <InputText @bind-Value="profile.Pic" placeholder="Picture URL" />
-    <InputCheckbox @bind-Value="profile.Gender" />
+    <InputText @bind-Value="Profile.NickName" placeholder="NickName" />
+    <InputNumber @bind-Value="Profile.Height" placeholder="Height" />
+    <InputNumber @bind-Value="Profile.Weight" placeholder="Weight" />
+    <InputText @bind-Value="Profile.Pic" placeholder="Picture URL" />
+    <InputText @bind-Value="Profile.Gender" placeholder="Gender" />
 
     <button type="submit">Create Profile</button>
 </EditForm>
 
 @code {
-    [SupplyParameterFromForm]
-    private Profile profile { get; set; } = new();
-    private int accountId;
+    public Profile Profile { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
+    private async Task AddProfile()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
         if (user.Identity.IsAuthenticated)
         {
-            var accountIdClaim = user.FindFirst("accountId")?.Value;
-            if (int.TryParse(accountIdClaim, out var parsedAccountId))
+            var account = await AccountService.GetAccountByUserNameAsync(user.Identity.Name);
+            if (account != null)
             {
-                accountId = parsedAccountId;
+                Profile.AccountId = account.AccountId;
+                Profile.BirthDate = account.BirthDate;
+
+                DB.Profiles.Add(Profile);
+                await DB.SaveChangesAsync();
+
+                Console.WriteLine("Profile saved successfully"); // Logging for debugging
+                NavigationManager.NavigateTo("/");
             }
             else
             {
-                // Handle the case where accountId is not found
-                // Redirect or show an error message
+                Console.WriteLine("Account not found"); // Logging for debugging
             }
         }
-        else
-        {
-            // Redirect to login or handle unauthenticated state
-        }
-    }
-
-    private async Task HandleValidSubmit()
-    {
-        profile.AccountId = accountId;
-        DB.Profiles.Add(profile);
-        await DB.SaveChangesAsync();
-        //await ProfileService.CreateProfileAsync(profile);
-        Navigation.NavigateTo("/profile");
     }
 }

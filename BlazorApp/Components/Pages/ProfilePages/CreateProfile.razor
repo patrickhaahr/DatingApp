@@ -1,0 +1,61 @@
+﻿@page "/createprofile"
+@using BlazorApp.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using BlazorApp.Models
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ProfileService ProfileService
+@inject NavigationManager Navigation
+@inject BlazorApp.Data.DatingAppDbContext DB
+
+<EditForm Model="profile" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText @bind-Value="profile.NickName" placeholder="NickName" />
+    <InputNumber @bind-Value="profile.Height" placeholder="Height" />
+    <InputNumber @bind-Value="profile.Weight" placeholder="Weight" />
+    <InputDate @bind-Value="profile.BirthDate" placeholder="Birth Date" />
+    <InputText @bind-Value="profile.Pic" placeholder="Picture URL" />
+    <InputCheckbox @bind-Value="profile.Gender" />
+
+    <button type="submit">Create Profile</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private Profile profile { get; set; } = new();
+    private int accountId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            var accountIdClaim = user.FindFirst("accountId")?.Value;
+            if (int.TryParse(accountIdClaim, out var parsedAccountId))
+            {
+                accountId = parsedAccountId;
+            }
+            else
+            {
+                // Handle the case where accountId is not found
+                // Redirect or show an error message
+            }
+        }
+        else
+        {
+            // Redirect to login or handle unauthenticated state
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        profile.AccountId = accountId;
+        DB.Profiles.Add(profile);
+        await DB.SaveChangesAsync();
+        //await ProfileService.CreateProfileAsync(profile);
+        Navigation.NavigateTo("/profile");
+    }
+}

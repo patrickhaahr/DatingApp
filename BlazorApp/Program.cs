@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
+using BlazorApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ builder.Services.AddDbContext<DatingAppDbContext>(options =>
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();;
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<ProfileService>();
 
 var app = builder.Build();
 

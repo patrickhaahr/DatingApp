@@ -20,7 +20,11 @@ namespace BlazorApp.Models
         [Required]
         [HiddenInput(DisplayValue = false)]
         public DateTime BirthDate { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
         public string Pic { get; set; }
+
+        [Required]
         public string NickName { get; set; }
 
         [Required]

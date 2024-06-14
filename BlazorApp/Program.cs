@@ -22,6 +22,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Accounts/Login";
         options.AccessDeniedPath = "/Accounts/AccessDenied";
     });
+
+builder.Services.AddHttpClient();
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddDbContext<DatingAppDbContext>(options =>

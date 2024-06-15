@@ -5,7 +5,7 @@
 namespace BlazorApp.Migrations
 {
     /// <inheritdoc />
-    public partial class Profilepicture : Migration
+    public partial class UpdateLike : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

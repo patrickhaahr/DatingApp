@@ -6,15 +6,15 @@
 @inject BlazorApp.Data.DatingAppDbContext DB
 @using Microsoft.EntityFrameworkCore
 @inject AccountService AccountService
+@inject ProfileService ProfileService
 @inject NavigationManager NavigationManager
-@inject IJSRuntime js
 @inject HttpClient Http
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @rendermode InteractiveServer
 
-<EditForm Model="@Profile" OnValidSubmit="@AddProfile">
+<EditForm Model="@Profile" OnValidSubmit="@AddProfile" FormName="createProfileForm">
     <Antiforgery />
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -23,44 +23,43 @@
     <InputNumber @bind-Value="Profile.Height" placeholder="Height" />
     <InputNumber @bind-Value="Profile.Weight" placeholder="Weight" />
     <label for="profilePicture">Upload Profile Picture:</label>
-    <InputFile OnChange="HandleSelected" class="filepond-profile-image-input" />
+    <InputFile OnChange="OnInputFileChange" />
+    <img src="@profilePic" alt="Profile Picture" style="width:200px; height:200px;" />
     <InputText @bind-Value="Profile.Gender" placeholder="Gender" />
 
     <button type="submit">Create Profile</button>
-    <script src="js/app.js"></script>
 </EditForm>
+
 
 @code {
     public Profile Profile { get; set; } = new();
+    private string base64Image;
+    private string profilePic;
 
-    private DotNetObjectReference<CreateProfile> objRef;
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.OpenReadStream().CopyToAsync(memoryStream);
+            var buffer = memoryStream.ToArray();
+            base64Image = Convert.ToBase64String(buffer);
+            profilePic = $"data:image/png;base64,{base64Image}";
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        objRef = DotNetObjectReference.Create(this);
+        await LoadProfilePic();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private async Task LoadProfilePic()
     {
-        await base.OnAfterRenderAsync(firstRender);
-        await js.InvokeVoidAsync("initializeFilePond", objRef);
-    }
-
-
-    [JSInvokable]
-    public void SetProfileImageUrl(string url)
-    {
-        Profile.Pic = url;
-        StateHasChanged();
-    }
-
-    private async Task HandleSelected(InputFileChangeEventArgs e)
-    {
-        var file = e.File;
-        using var memoryStream = new MemoryStream();
-        await file.OpenReadStream().CopyToAsync(memoryStream);
-        var fileBytes = memoryStream.ToArray();
-        Profile.Pic = Convert.ToBase64String(fileBytes);
+        var profile = await ProfileService.GetProfileAsync();
+        if (profile != null && !string.IsNullOrEmpty(profile.Pic))
+        {
+            profilePic = $"data:image/png;base64,{profile.Pic}";
+        }
     }
 
     private async Task AddProfile()
@@ -75,21 +74,18 @@
             {
                 Profile.AccountId = account.AccountId;
                 Profile.BirthDate = account.BirthDate;
+                Profile.Pic = base64Image;  // Ensure Pic is set
 
                 DB.Profiles.Add(Profile);
                 await DB.SaveChangesAsync();
 
-                Console.WriteLine("Profile saved successfully"); // Logging for debugging
+                Console.WriteLine("Profile saved successfully");
                 NavigationManager.NavigateTo("/");
             }
             else
             {
-                Console.WriteLine("Account not found"); // Logging for debugging
+                Console.WriteLine("Account not found");
             }
         }
-    }
-    public void Dispose()
-    {
-        objRef?.Dispose();
     }
 }

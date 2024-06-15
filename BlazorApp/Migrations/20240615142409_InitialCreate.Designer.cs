@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorApp.Migrations
 {
     [DbContext(typeof(DatingAppDbContext))]
-    [Migration("20240614093227_Profilepicture")]
-    partial class Profilepicture
+    [Migration("20240615142409_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,7 +206,6 @@ namespace BlazorApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Pic")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Weight")

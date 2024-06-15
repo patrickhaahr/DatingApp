@@ -8,15 +8,19 @@ namespace BlazorApp.Models
         [Key]
         public int LikeId { get; set; }
 
+        [Required]
         public int SenderId { get; set; }
+
+        [Required]
         public int ReceiverId { get; set; }
+
+        [Required]
+        public int Status { get; set; } = -1;
 
         [ForeignKey("SenderId")]
         public Account Sender { get; set; }
 
         [ForeignKey("ReceiverId")]
         public Profile Receiver { get; set; }
-
-        public int Status { get; set; } = 0;
     }
 }

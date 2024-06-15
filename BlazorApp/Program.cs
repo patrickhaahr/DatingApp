@@ -31,6 +31,7 @@ builder.Services.AddDbContext<DatingAppDbContext>(options =>
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();;
 
+builder.Services.AddScoped<AuthHelperService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();

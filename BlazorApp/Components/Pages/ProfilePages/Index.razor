@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject BlazorApp.Data.DatingAppDbContext DB
 @using BlazorApp.Models
+@rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
 
@@ -12,11 +13,11 @@
 </p>
 
 <QuickGrid Class="table" Items="DB.Profiles">
+    <PropertyColumn Property="profile => profile.ProfileId" />
     <PropertyColumn Property="profile => profile.AccountId" />
     <PropertyColumn Property="profile => profile.Height" />
     <PropertyColumn Property="profile => profile.Weight" />
     <PropertyColumn Property="profile => profile.BirthDate" />
-    <PropertyColumn Property="profile => profile.Pic" />
     <PropertyColumn Property="profile => profile.NickName" />
     <PropertyColumn Property="profile => profile.Gender" />
 

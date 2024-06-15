@@ -1,71 +1,83 @@
 ﻿@page "/"
 @using System.Drawing
+@using BlazorApp.Models
+@using Microsoft.AspNetCore.Components.Authorization
+@using BlazorApp.Services
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ProfileService ProfileService
+@rendermode InteractiveServer
 
 <AuthorizeView>
     <Authorized>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <script src="https://cdn.tailwindcss.com"></script>
-        </head>
-        <body>
-            <div class="flex h-screen">
-
-                <div class="w-1/4 bg-zinc-100 p-4">
-                    <div class="flex items-center mb-4">
-                        <img src="https://placehold.co/40x40" alt="profile" class="rounded-full mr-2">
-                        <h2 class="text-lg font-semibold">My Profile</h2>
-                    </div>
-                    <div class="mb-4">
-                        <h3 class="text-pink-500 font-semibold">Discover New Matches</h3>
-                        <p class="text-zinc-500">Start swiping to connect with new people!</p>
-                    </div>
-                    <div>
-                        <h3 class="text-pink-500 font-semibold mb-2">Messages</h3>
-                        <div class="flex items-center mb-4">
-                            <img src="https://placehold.co/40x40" alt="User1" class="rounded-full mr-2">
-                            <div>
-                                <h4 class="font-semibold">User1 <span class="text-blue-500">⭐</span></h4>
-                                <p class="text-zinc-500">New Match! Say Hello 👋</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center mb-4">
-                            <img src="https://placehold.co/40x40" alt="User2" class="rounded-full mr-2">
-                            <div>
-                                <h4 class="font-semibold">User2</h4>
-                                <p class="text-zinc-500">New Match! Say Hello 👋</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center mb-4">
-                            <img src="https://placehold.co/40x40" alt="User3" class="rounded-full mr-2">
-                            <div>
-                                <h4 class="font-semibold">User3 <span class="text-red-500">❌</span></h4>
-                                <p class="text-zinc-500">Lorem ipsum dolor sit amet, consectetur</p>
-                            </div>
-                        </div>
-                    </div>
+        <div class="flex h-screen">
+            <div class="w-1/4 bg-zinc-100 p-4">
+                <div class="flex items-center mb-4">
+                    <img src="https://placehold.co/40x40" alt="profile" class="rounded-full mr-2">
+                    <h2 class="text-lg font-semibold">My Profile</h2>
                 </div>
-
-                <div class="w-3/4 bg-white p-4">
-                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                        <img src="https://placehold.co/600x400" alt="Alex surfing" class="w-full">
-                        <div class="p-4">
-                            <h3 class="text-xl font-semibold">User5, 24</h3>
-                            <p class="text-zinc-500">Student</p>
-                            <p class="text-zinc-500">5 km away</p>
-                            <p class="mt-2 text-zinc-700">*BIO* Quisque vel sem at nulla volutpat porta ac vel metus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-                            <div class="flex justify-around mt-4">
-                                <button class="bg-red-500 text-white p-2 rounded-full">❌</button>
-                                <button class="bg-blue-500 text-white p-2 rounded-full">⭐</button>
-                                <button class="bg-green-500 text-white p-2 rounded-full">💚</button>
-                            </div>
+                <div class="mb-4">
+                    <h3 class="text-pink-500 font-semibold">Discover New Matches</h3>
+                    <p class="text-zinc-500">Start swiping to connect with new people!</p>
+                </div>
+                <div>
+                    <h3 class="text-pink-500 font-semibold mb-2">Messages</h3>
+                    <div class="flex items-center mb-4">
+                        <img src="https://placehold.co/40x40" alt="User1" class="rounded-full mr-2">
+                        <div>
+                            <h4 class="font-semibold">User1 <span class="text-blue-500">⭐</span></h4>
+                            <p class="text-zinc-500">New Match! Say Hello 👋</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <img src="https://placehold.co/40x40" alt="User2" class="rounded-full mr-2">
+                        <div>
+                            <h4 class="font-semibold">User2</h4>
+                            <p class="text-zinc-500">New Match! Say Hello 👋</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <img src="https://placehold.co/40x40" alt="User3" class="rounded-full mr-2">
+                        <div>
+                            <h4 class="font-semibold">User3 <span class="text-red-500">❌</span></h4>
+                            <p class="text-zinc-500">Lorem ipsum dolor sit amet, consectetur</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </body>
-    </html>
+
+            <div class="profiles-container">
+                @if (profiles == null)
+                {
+                    <p>Loading profiles...</p>
+                }
+                else if (profiles.Count == 0)
+                {
+                    <p>No profiles found.</p>
+                }
+                else
+                {
+                    @foreach (var profile in profiles)
+                    {
+                        <div class="max-w-sm w-full lg:max-w-full lg:flex shadow-lg rounded-lg overflow-hidden">
+                            <img class="h-48 w-full object-cover md:w-48" src="@($"data:image/png;base64,{profile.Pic}")" alt="@profile.NickName's photo">
+                            <div class="p-4 flex flex-col justify-between leading-normal">
+                                <div class="mb-8">
+                                    <div class="text-gray-900 font-bold text-xl mb-2">@profile.NickName, @profile.BirthDate.ToShortDateString()</div>
+                                    <p class="text-gray-700 text-base">@profile.Height cm</p>
+                                    <p class="text-gray-700 text-base">@profile.Weight kg</p>
+                                    <p class="text-gray-700 text-base mt-2">@profile.Gender</p>
+                                </div>
+                                <div class="flex justify-around mt-4">
+                                    <button class="bg-red-500 text-white p-2 rounded-full text-2xl">❌</button>
+                                    <button class="bg-blue-500 text-white p-2 rounded-full text-2xl">⭐</button>
+                                    <button class="bg-green-500 text-white p-2 rounded-full text-2xl">💚</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
     </Authorized>
     <NotAuthorized>
         <div class="text-center py-16 bg-cover bg-center text-white" style="background-image: url('/images/background.png');">
@@ -75,8 +87,11 @@
     </NotAuthorized>
 </AuthorizeView>
 
-
-
-
 @code {
+    private List<Profile> profiles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        profiles = await ProfileService.GetProfilesAsync();
+    }
 }

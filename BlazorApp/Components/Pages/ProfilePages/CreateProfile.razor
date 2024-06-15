@@ -6,13 +6,15 @@
 @inject BlazorApp.Data.DatingAppDbContext DB
 @using Microsoft.EntityFrameworkCore
 @inject AccountService AccountService
+@inject ProfileService ProfileService
 @inject NavigationManager NavigationManager
+@inject HttpClient Http
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @rendermode InteractiveServer
 
-<EditForm Model="@Profile" OnValidSubmit="@AddProfile">
+<EditForm Model="@Profile" OnValidSubmit="@AddProfile" FormName="createProfileForm">
     <Antiforgery />
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -20,14 +22,45 @@
     <InputText @bind-Value="Profile.NickName" placeholder="NickName" />
     <InputNumber @bind-Value="Profile.Height" placeholder="Height" />
     <InputNumber @bind-Value="Profile.Weight" placeholder="Weight" />
-    <InputText @bind-Value="Profile.Pic" placeholder="Picture URL" />
+    <label for="profilePicture">Upload Profile Picture:</label>
+    <InputFile OnChange="OnInputFileChange" />
+    <img src="@profilePic" alt="Profile Picture" style="width:200px; height:200px;" />
     <InputText @bind-Value="Profile.Gender" placeholder="Gender" />
 
     <button type="submit">Create Profile</button>
 </EditForm>
 
+
 @code {
     public Profile Profile { get; set; } = new();
+    private string base64Image;
+    private string profilePic;
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.OpenReadStream().CopyToAsync(memoryStream);
+            var buffer = memoryStream.ToArray();
+            base64Image = Convert.ToBase64String(buffer);
+            profilePic = $"data:image/png;base64,{base64Image}";
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProfilePic();
+    }
+
+    private async Task LoadProfilePic()
+    {
+        var profile = await ProfileService.GetProfileAsync();
+        if (profile != null && !string.IsNullOrEmpty(profile.Pic))
+        {
+            profilePic = $"data:image/png;base64,{profile.Pic}";
+        }
+    }
 
     private async Task AddProfile()
     {
@@ -41,16 +74,17 @@
             {
                 Profile.AccountId = account.AccountId;
                 Profile.BirthDate = account.BirthDate;
+                Profile.Pic = base64Image;  // Ensure Pic is set
 
                 DB.Profiles.Add(Profile);
                 await DB.SaveChangesAsync();
 
-                Console.WriteLine("Profile saved successfully"); // Logging for debugging
+                Console.WriteLine("Profile saved successfully");
                 NavigationManager.NavigateTo("/");
             }
             else
             {
-                Console.WriteLine("Account not found"); // Logging for debugging
+                Console.WriteLine("Account not found");
             }
         }
     }

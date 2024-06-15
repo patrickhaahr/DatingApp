@@ -22,6 +22,7 @@ namespace BlazorApp.Controllers
                 await file.CopyToAsync(fileStream);
             }
 
+            var fileUrl = Path.Combine("C:\\Users\\svaki\\Desktop\\uploads", file.FileName).Replace("\\", "/");
             return Ok();
         }
     }

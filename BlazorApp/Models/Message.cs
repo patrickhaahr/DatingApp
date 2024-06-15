@@ -16,7 +16,7 @@ namespace BlazorApp.Models
         public Account Sender { get; set; }
 
         [ForeignKey("ReceiverId")]
-        public Account Receiver { get; set; }
+        public Profile Receiver { get; set; }
 
         [Required]
         public string MessageText { get; set; }

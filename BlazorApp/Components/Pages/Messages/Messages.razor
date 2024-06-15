@@ -1,0 +1,91 @@
+﻿@page "/messages"
+@using BlazorApp.Models
+@using BlazorApp.Services
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AccountService AccountService
+@inject MessageService MessageService
+@rendermode InteractiveServer
+
+<AuthorizeView>
+    <Authorized Context="authContext">
+        <h3>Messages</h3>
+        <div>
+            <ul>
+                @foreach (var message in messages)
+                {
+                    <li>
+                        <strong>@message.Sender.UserName:</strong> @message.MessageText
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <EditForm Model="@newMessage" OnValidSubmit="SendMessage" Context="editContext">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <InputSelect @bind-Value="newMessage.ReceiverId">
+                @foreach (var match in matches)
+                {
+                    <option value="@match.ProfileId">@match.NickName</option>
+                }
+            </InputSelect>
+            <InputTextArea @bind-Value="newMessage.MessageText" placeholder="Type your message..." />
+            <button type="submit">Send</button>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized to view this page.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<Message> messages = new List<Message>();
+    private List<Profile> matches = new List<Profile>();
+    private Message newMessage = new Message();
+    private int currentUserId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            var account = await AccountService.GetAccountByUserNameAsync(user.Identity.Name);
+            if (account != null)
+            {
+                currentUserId = account.AccountId;
+                await LoadMessages();
+                await LoadMatches();
+            }
+        }
+    }
+
+    private async Task LoadMessages()
+    {
+        messages = await MessageService.GetMessagesAsync(currentUserId);
+    }
+
+    private async Task LoadMatches()
+    {
+        matches = await MessageService.GetMatchesAsync(currentUserId);
+    }
+
+    private async Task SendMessage()
+    {
+        newMessage.SenderId = currentUserId;
+        newMessage.SentDate = DateTime.Now;
+
+        if (matches.Any(m => m.ProfileId == newMessage.ReceiverId))
+        {
+            await MessageService.SendMessageAsync(newMessage);
+            newMessage.MessageText = string.Empty;
+            newMessage.ReceiverId = 0; // Reset the receiver id
+            await LoadMessages();
+        }
+        else
+        {
+            Console.WriteLine("Invalid ReceiverId");
+        }
+    }
+}

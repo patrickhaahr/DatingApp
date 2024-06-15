@@ -62,6 +62,5 @@ namespace BlazorApp.Models
         public Profile Profile { get; set; }
         public List<Location> Locations { get; set; } = new List<Location>();
         public List<Message> SentMessages { get; set; } = new List<Message>();
-        public List<Message> ReceivedMessages { get; set; } = new List<Message>();
     }
 }

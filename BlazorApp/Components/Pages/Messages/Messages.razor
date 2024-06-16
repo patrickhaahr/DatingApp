@@ -76,6 +76,8 @@
         newMessage.SenderId = currentUserId;
         newMessage.SentDate = DateTime.Now;
 
+        Console.WriteLine($"Attempting to send message to ReceiverId: {newMessage.ReceiverId}");
+
         if (matches.Any(m => m.ProfileId == newMessage.ReceiverId))
         {
             await MessageService.SendMessageAsync(newMessage);

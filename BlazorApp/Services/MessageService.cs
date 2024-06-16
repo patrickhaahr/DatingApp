@@ -40,7 +40,7 @@ namespace BlazorApp.Services
             return await _context.Messages
                 .Include(m => m.Sender)
                 .Include(m => m.Receiver)
-                .Where(m => m.SenderId == userId || m.Receiver.AccountId == userId)
+                .Where(m => m.SenderId == userId || m.Receiver.ProfileId == userId)
                 .OrderBy(m => m.SentDate)
                 .ToListAsync();
         }
@@ -60,7 +60,7 @@ namespace BlazorApp.Services
             var matchedUserIds = likedByUser.Union(likedUser).ToList();
 
             return await _context.Profiles
-                .Where(p => matchedUserIds.Contains(p.AccountId))
+                .Where(p => matchedUserIds.Contains(p.ProfileId))
                 .ToListAsync();
         }
     }

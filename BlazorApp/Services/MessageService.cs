@@ -35,12 +35,12 @@ namespace BlazorApp.Services
             }
         }
 
-        public async Task<List<Message>> GetMessagesAsync(int userId)
+        public async Task<List<Message>> GetMessagesAsync(int userId, int matchProfileId)
         {
             return await _context.Messages
                 .Include(m => m.Sender)
                 .Include(m => m.Receiver)
-                .Where(m => m.SenderId == userId || m.Receiver.ProfileId == userId)
+                .Where(m => (m.SenderId == userId && m.ReceiverId == matchProfileId) || (m.SenderId == matchProfileId && m.Receiver.AccountId == userId))
                 .OrderBy(m => m.SentDate)
                 .ToListAsync();
         }

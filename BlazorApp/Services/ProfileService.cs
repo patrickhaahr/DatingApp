@@ -42,6 +42,11 @@ namespace BlazorApp.Services
             return null;
         }
 
+        public async Task<Profile> GetProfileByIdAsync(int profileId)
+        {
+            return await _context.Profiles.FindAsync(profileId);
+        }
+
         public async Task<List<Profile>> GetProfilesAsync()
         {
             var account = await _authHelperService.GetAuthenticatedAccountAsync();

@@ -8,7 +8,7 @@ namespace BlazorApp.Models
 {
     public class Profile
     {
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProfileId { get; set; }
 
         [Required]

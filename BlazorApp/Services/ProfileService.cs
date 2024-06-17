@@ -46,6 +46,11 @@ namespace BlazorApp.Services
         {
             return await _context.Profiles.FindAsync(profileId);
         }
+        public async Task<Profile> GetProfileByAccountIdAsync(int accountId)
+        {
+            return await _context.Profiles.FirstOrDefaultAsync(p => p.AccountId == accountId);
+        }
+
 
         public async Task<List<Profile>> GetProfilesAsync()
         {

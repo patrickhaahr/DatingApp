@@ -26,7 +26,7 @@ namespace BlazorApp.Data
 
             // Configure primary key of City not to be an identity column
             modelBuilder.Entity<City>()
-            .Property(c => c.CityId)
+                .Property(c => c.CityId)
                 .ValueGeneratedNever();
 
             // Configure unique constraints for Email and UserName
@@ -64,7 +64,7 @@ namespace BlazorApp.Data
 
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Receiver)
-                .WithMany(a => a.ReceivedMessages)
+                .WithMany(p => p.ReceivedMessages)
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
 

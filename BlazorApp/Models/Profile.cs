@@ -33,5 +33,6 @@ namespace BlazorApp.Models
         [ForeignKey("AccountId")]
         public Account Account { get; set; }
         public List<Like> ReceivedLikes { get; set; } = new List<Like>();
+        public List<Message> ReceivedMessages { get; set; } = new List<Message>();
     }
 }

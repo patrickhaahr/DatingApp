@@ -22,7 +22,8 @@ namespace BlazorApp.Data
             modelBuilder.Entity<Account>()
                 .HasOne(a => a.Profile)
                 .WithOne(p => p.Account)
-                .HasForeignKey<Profile>(p => p.AccountId);
+                .HasForeignKey<Profile>(p => p.AccountId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Configure primary key of City not to be an identity column
             modelBuilder.Entity<City>()

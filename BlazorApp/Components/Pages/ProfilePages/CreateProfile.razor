@@ -73,11 +73,11 @@
             if (account != null)
             {
                 Profile.AccountId = account.AccountId;
+                Profile.ProfileId = account.AccountId;
                 Profile.BirthDate = account.BirthDate;
                 Profile.Pic = base64Image;  // Ensure Pic is set
 
-                DB.Profiles.Add(Profile);
-                await DB.SaveChangesAsync();
+                await ProfileService.AddProfileAsync(Profile);
 
                 Console.WriteLine("Profile saved successfully");
                 NavigationManager.NavigateTo("/");

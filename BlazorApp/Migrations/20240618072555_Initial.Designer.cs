@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorApp.Migrations
 {
     [DbContext(typeof(DatingAppDbContext))]
-    [Migration("20240615142409_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240618072555_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -194,9 +194,8 @@ namespace BlazorApp.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Height")
                         .HasColumnType("int");
@@ -259,7 +258,7 @@ namespace BlazorApp.Migrations
 
             modelBuilder.Entity("BlazorApp.Models.Message", b =>
                 {
-                    b.HasOne("BlazorApp.Models.Account", "Receiver")
+                    b.HasOne("BlazorApp.Models.Profile", "Receiver")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -294,8 +293,6 @@ namespace BlazorApp.Migrations
                     b.Navigation("Profile")
                         .IsRequired();
 
-                    b.Navigation("ReceivedMessages");
-
                     b.Navigation("SentLikes");
 
                     b.Navigation("SentMessages");
@@ -304,6 +301,8 @@ namespace BlazorApp.Migrations
             modelBuilder.Entity("BlazorApp.Models.Profile", b =>
                 {
                     b.Navigation("ReceivedLikes");
+
+                    b.Navigation("ReceivedMessages");
                 });
 #pragma warning restore 612, 618
         }

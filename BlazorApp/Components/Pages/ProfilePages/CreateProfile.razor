@@ -25,7 +25,11 @@
     <label for="profilePicture">Upload Profile Picture:</label>
     <InputFile OnChange="OnInputFileChange" />
     <img src="@profilePic" alt="Profile Picture" style="width:200px; height:200px;" />
-    <InputText @bind-Value="Profile.Gender" placeholder="Gender" />
+    
+    <InputRadioGroup @bind-Value="Profile.Gender"> 
+    <InputRadio Value="true" /> Male
+    <InputRadio Value="false"/> Female
+    </InputRadioGroup>
 
     <button type="submit">Create Profile</button>
 </EditForm>

@@ -31,11 +31,22 @@
     <InputRadio Value="false"/> Female
     </InputRadioGroup>
 
+    <label for="zipcode">Zip Code:</label>
+    <select id="zipcode" @bind="Profile.CityZipCode" class="form-control">
+        <option value="">Select a city</option>
+        @foreach (var city in cities)
+        {
+            <option value="@city.ZipCode">@city.CityName (@city.ZipCode)</option>
+        }
+    </select>
+
+
     <button type="submit">Create Profile</button>
 </EditForm>
 
 
 @code {
+    private List<City> cities;
     public Profile Profile { get; set; } = new();
     private string base64Image;
     private string profilePic;

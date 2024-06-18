@@ -36,7 +36,7 @@ namespace BlazorApp.Services
             var account = await _authHelperService.GetAuthenticatedAccountAsync();
             if (account != null)
             {
-                return await _context.Profiles.FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
+                return await _context.Profiles.Include(p => p.City).FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
             }
 
             return null;

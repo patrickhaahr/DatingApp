@@ -32,6 +32,12 @@ namespace BlazorApp.Models
 
         [ForeignKey("AccountId")]
         public Account Account { get; set; }
+
+        // Foreign key relationship with City via ZipCode
+        [Required]
+        public int CityZipCode { get; set; }
+        [ForeignKey("City")]
+        public City City { get; set; }
         public List<Like> ReceivedLikes { get; set; } = new List<Like>();
         public List<Message> ReceivedMessages { get; set; } = new List<Message>();
 

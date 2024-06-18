@@ -20,6 +20,8 @@
     <PropertyColumn Property="profile => profile.Age" />
     <PropertyColumn Property="profile => profile.NickName" />
     <PropertyColumn Property="profile => profile.GenderDisplay" />
+    <PropertyColumn Property="profile => profile.CityZipCode" />
+    <PropertyColumn Property="profile => profile.City.CityName" />
 
     <TemplateColumn Context="profile">
         <a href="@($"profiles/edit?profileid={profile.ProfileId}")">Edit</a> |

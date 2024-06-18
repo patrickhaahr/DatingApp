@@ -14,7 +14,6 @@ namespace BlazorApp.Data
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<City> Cities { get; set; }
-        public DbSet<Location> Locations { get; set; }
         public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +25,7 @@ namespace BlazorApp.Data
 
             // Configure primary key of City not to be an identity column
             modelBuilder.Entity<City>()
-                .Property(c => c.CityId)
+                .Property(c => c.ZipCode)
                 .ValueGeneratedNever();
 
             // Configure unique constraints for Email and UserName

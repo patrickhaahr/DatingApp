@@ -17,9 +17,10 @@
     <PropertyColumn Property="profile => profile.AccountId" />
     <PropertyColumn Property="profile => profile.Height" />
     <PropertyColumn Property="profile => profile.Weight" />
-    <PropertyColumn Property="profile => profile.BirthDate" />
+    <PropertyColumn Property="profile => profile.Age" />
     <PropertyColumn Property="profile => profile.NickName" />
-    <PropertyColumn Property="profile => profile.Gender" />
+    <PropertyColumn Property="profile => profile.GenderDisplay" />
+    <PropertyColumn Property="profile => profile.ZipCode" />
 
     <TemplateColumn Context="profile">
         <a href="@($"profiles/edit?profileid={profile.ProfileId}")">Edit</a> |

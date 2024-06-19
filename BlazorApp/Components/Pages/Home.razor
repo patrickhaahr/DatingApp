@@ -65,7 +65,7 @@
                                     <div class="text-gray-900 font-bold text-xl mb-2">@profile.NickName, @profile.BirthDate.ToShortDateString()</div>
                                     <p class="text-gray-700 text-base">@profile.Height cm</p>
                                     <p class="text-gray-700 text-base">@profile.Weight kg</p>
-                                    <p class="text-gray-700 text-base mt-2">@profile.Gender</p>
+                                    <p class="text-gray-700 text-base mt-2">@profile.GenderDisplay</p>
                                 </div>
                                 <div class="flex justify-around mt-4">
                                     <button class="bg-red-500 text-white p-2 rounded-full text-2xl" @onclick="() => DislikeProfile(profile.ProfileId)">❌</button>

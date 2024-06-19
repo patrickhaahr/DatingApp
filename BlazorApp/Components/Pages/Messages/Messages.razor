@@ -40,7 +40,7 @@
                                 <img src="@($"data:image/png;base64,{match.Pic}")" alt="match.NickName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
                                 <div>
                                     <div class="font-semibold dark:text-white">@match.NickName</div>
-                                    <div class="text-sm text-zinc-500 dark:text-zinc-400">@match.Gender</div>
+                                    <div class="text-sm text-zinc-500 dark:text-zinc-400">@match.GenderDisplay</div>
                                 </div>
                             </div>
                         }
@@ -74,7 +74,7 @@
             {
                 <div class="w-1/4 bg-white dark:bg-zinc-800 p-4">
                     <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.NickName's photo" class="rounded-lg mb-4" style="width: 200px; height: 200px;">
-                    <div class="font-semibold text-xl mb-2 dark:text-white">@selectedMatch.NickName @selectedMatch.BirthDate</div>
+                    <div class="font-semibold text-xl mb-2 dark:text-white">@selectedMatch.NickName @selectedMatch.Age</div>
                     <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Height</div>
                     <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Weight</div>
                     <div class="flex justify-between">

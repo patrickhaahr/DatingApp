@@ -1,7 +1,10 @@
 ﻿@page "/profiles"
+@using BlazorApp.Services
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject BlazorApp.Data.DatingAppDbContext DB
+@inject ProfileService ProfileService
 @using BlazorApp.Models
+@using Microsoft.EntityFrameworkCore
 @rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
@@ -12,7 +15,7 @@
     <a href="profiles/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="DB.Profiles">
+<QuickGrid Class="table" Items="DB.Profiles.Include(p => p.City)">
     <PropertyColumn Property="profile => profile.ProfileId" />
     <PropertyColumn Property="profile => profile.AccountId" />
     <PropertyColumn Property="profile => profile.Height" />
@@ -21,6 +24,7 @@
     <PropertyColumn Property="profile => profile.NickName" />
     <PropertyColumn Property="profile => profile.GenderDisplay" />
     <PropertyColumn Property="profile => profile.ZipCode" />
+    <PropertyColumn Property="profile => profile.City.CityName" />
 
     <TemplateColumn Context="profile">
         <a href="@($"profiles/edit?profileid={profile.ProfileId}")">Edit</a> |

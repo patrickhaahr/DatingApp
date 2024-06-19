@@ -20,7 +20,30 @@ namespace BlazorApp.Services
         {
             return await _context.Profiles.Include(p => p.City).ToListAsync();
         }
-
+        public async Task AddProfileAsync(Profile profile)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Profiles ON");
+                    _context.Profiles.Add(profile);
+                    await _context.SaveChangesAsync();
+                    await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Profiles OFF");
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
+        public async Task UpdateProfileAsync(Profile profile)
+        {
+            _context.Profiles.Update(profile);
+            await _context.SaveChangesAsync();
+        }
         public async Task SaveImageToDatabase(string base64Image)
         {
             var account = await _authHelperService.GetAuthenticatedAccountAsync();
@@ -34,7 +57,6 @@ namespace BlazorApp.Services
                 }
             }
         }
-
         public async Task<Profile> GetProfileAsync()
         {
             var account = await _authHelperService.GetAuthenticatedAccountAsync();

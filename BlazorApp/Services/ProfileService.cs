@@ -16,6 +16,10 @@ namespace BlazorApp.Services
             _context = context;
             _authHelperService = authHelperService;
         }
+        public async Task<List<Profile>> GetProfilesWithCitiesAsync()
+        {
+            return await _context.Profiles.Include(p => p.City).ToListAsync();
+        }
 
         public async Task SaveImageToDatabase(string base64Image)
         {

@@ -34,7 +34,6 @@ namespace BlazorApp.Models
         [ForeignKey("AccountId")]
         public Account Account { get; set; }
 
-        // Foreign key relationship with City via ZipCode
         [Required]
         [ForeignKey("City")]
         public int ZipCode { get; set; }

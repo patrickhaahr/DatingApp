@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace BlazorApp.Models
 {
     public class Profile
@@ -35,8 +36,9 @@ namespace BlazorApp.Models
 
         // Foreign key relationship with City via ZipCode
         [Required]
-        public int CityZipCode { get; set; }
         [ForeignKey("City")]
+        public int ZipCode { get; set; }
+        
         public City City { get; set; }
         public List<Like> ReceivedLikes { get; set; } = new List<Like>();
         public List<Message> ReceivedMessages { get; set; } = new List<Message>();

@@ -5,6 +5,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject BlazorApp.Data.DatingAppDbContext DB
 @using Microsoft.EntityFrameworkCore
+@inject CityService CityService
 @inject AccountService AccountService
 @inject ProfileService ProfileService
 @inject NavigationManager NavigationManager
@@ -32,7 +33,7 @@
     </InputRadioGroup>
 
     <label for="zipcode">Zip Code:</label>
-    <select id="zipcode" @bind="Profile.CityZipCode" class="form-control">
+    <select id="zipcode" @bind="Profile.ZipCode" class="form-control">
         <option value="">Select a city</option>
         @foreach (var city in cities)
         {
@@ -46,10 +47,12 @@
 
 
 @code {
-    private List<City> cities;
+
+    [SupplyParameterFromForm]
     public Profile Profile { get; set; } = new();
     private string base64Image;
     private string profilePic;
+    private List<City> cities = new List<City>();
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
@@ -66,6 +69,16 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadProfilePic();
+    }
+
+    protected override void OnInitialized()
+    {
+        GetCities();
+    }
+    public void GetCities()
+    {
+        var getCities = CityService.GetCityAsync();
+        cities = getCities;
     }
 
     private async Task LoadProfilePic()

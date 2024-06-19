@@ -16,6 +16,10 @@ namespace BlazorApp.Services
             _context = context;
             _authHelperService = authHelperService;
         }
+        public async Task<List<Profile>> GetProfilesWithCitiesAsync()
+        {
+            return await _context.Profiles.Include(p => p.City).ToListAsync();
+        }
         public async Task AddProfileAsync(Profile profile)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -53,13 +57,12 @@ namespace BlazorApp.Services
                 }
             }
         }
-
         public async Task<Profile> GetProfileAsync()
         {
             var account = await _authHelperService.GetAuthenticatedAccountAsync();
             if (account != null)
             {
-                return await _context.Profiles.FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
+                return await _context.Profiles.Include(p => p.City).FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
             }
 
             return null;

@@ -82,18 +82,14 @@ namespace BlazorApp.Migrations
 
             modelBuilder.Entity("BlazorApp.Models.City", b =>
                 {
-                    b.Property<int>("CityId")
+                    b.Property<int>("ZipCode")
                         .HasColumnType("int");
 
                     b.Property<string>("CityName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CityId");
+                    b.HasKey("ZipCode");
 
                     b.ToTable("Cities");
                 });
@@ -122,29 +118,6 @@ namespace BlazorApp.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("Likes");
-                });
-
-            modelBuilder.Entity("BlazorApp.Models.Location", b =>
-                {
-                    b.Property<int>("LocationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LocationId");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("BlazorApp.Models.Message", b =>
@@ -191,9 +164,8 @@ namespace BlazorApp.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Height")
                         .HasColumnType("int");
@@ -208,10 +180,15 @@ namespace BlazorApp.Migrations
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
+
                     b.HasKey("ProfileId");
 
                     b.HasIndex("AccountId")
                         .IsUnique();
+
+                    b.HasIndex("ZipCode");
 
                     b.ToTable("Profiles");
                 });
@@ -233,25 +210,6 @@ namespace BlazorApp.Migrations
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("BlazorApp.Models.Location", b =>
-                {
-                    b.HasOne("BlazorApp.Models.Account", "Account")
-                        .WithMany("Locations")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BlazorApp.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("BlazorApp.Models.Message", b =>
@@ -281,13 +239,19 @@ namespace BlazorApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlazorApp.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("ZipCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Account");
+
+                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("BlazorApp.Models.Account", b =>
                 {
-                    b.Navigation("Locations");
-
                     b.Navigation("Profile")
                         .IsRequired();
 

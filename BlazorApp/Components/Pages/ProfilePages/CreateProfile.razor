@@ -25,16 +25,33 @@
     <label for="profilePicture">Upload Profile Picture:</label>
     <InputFile OnChange="OnInputFileChange" />
     <img src="@profilePic" alt="Profile Picture" style="width:200px; height:200px;" />
-    <InputText @bind-Value="Profile.Gender" placeholder="Gender" />
+    
+    <InputRadioGroup @bind-Value="Profile.Gender"> 
+    <InputRadio Value="true" /> Male
+    <InputRadio Value="false"/> Female
+    </InputRadioGroup>
+
+    <label for="zipcode">Zip Code:</label>
+    <select id="zipcode" @bind="Profile.ZipCode" class="form-control">
+        <option value="">Select a city</option>
+        @foreach (var city in cities)
+        {
+            <option value="@city.ZipCode">@city.CityName (@city.ZipCode)</option>
+        }
+    </select>
+
 
     <button type="submit">Create Profile</button>
 </EditForm>
 
 
 @code {
+
+    [SupplyParameterFromForm]
     public Profile Profile { get; set; } = new();
     private string base64Image;
     private string profilePic;
+    private List<City> cities = new List<City>();
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
@@ -51,6 +68,12 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadProfilePic();
+        await LoadCities();
+    }
+
+    private async Task LoadCities()
+    {
+        cities = await DB.Cities.ToListAsync();
     }
 
     private async Task LoadProfilePic()

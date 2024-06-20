@@ -4,15 +4,20 @@
     <nav class="flex space-x-3">
     <AuthorizeView Roles="Administrator">
         <Authorized>
-                <a href="accounts/create" class="text-white font-medium hover:underline">Create</a>
                 <a href="accounts" class="text-white font-medium hover:underline">Index</a>
                 <a href="weather" class="text-white font-medium hover:underline">Weather</a>
+                <a href="profiles" class="text-white font-medium hover:underline">Profiles</a>
+                <a href="likes" class="text-white font-medium hover:underline">likes</a>
+                <a href="messages" class="text-white font-medium hover:underline">Messages</a>
         </Authorized>
     </AuthorizeView>
     <AuthorizeView Roles="Administrator,User">
         <Authorized>
-            <a href="counter" class="text-white font-medium hover:underline">Counter</a>
-            <a href="messages" class="text-white font-medium hover:underline">Messages</a>
+                <a href="accounts" class="text-white font-medium hover:underline">Index</a>
+                <a href="weather" class="text-white font-medium hover:underline">Weather</a>
+                <a href="profiles" class="text-white font-medium hover:underline">Profiles</a>
+                <a href="likes" class="text-white font-medium hover:underline">likes</a>
+                <a href="messages" class="text-white font-medium hover:underline">Messages</a>
         </Authorized>
     </AuthorizeView>
     </nav>

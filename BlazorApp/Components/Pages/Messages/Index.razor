@@ -1,0 +1,20 @@
+﻿@page "/messages"
+@using BlazorApp.Services
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject BlazorApp.Data.DatingAppDbContext DB
+@inject ProfileService ProfileService
+@using BlazorApp.Models
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<QuickGrid Class="table" Items="DB.Messages">
+    <PropertyColumn Property="messages => messages.MessageId" />
+    <PropertyColumn Property="messages => messages.SenderId" />
+    <PropertyColumn Property="messages => messages.ReceiverId" />
+    <PropertyColumn Property="messages => messages.MessageText" />
+    <PropertyColumn Property="messages => messages.SentDate" />
+</QuickGrid>

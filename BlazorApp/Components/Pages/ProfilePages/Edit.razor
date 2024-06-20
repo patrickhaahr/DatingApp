@@ -23,11 +23,7 @@ else
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <input type="hidden" name="Profile.ProfileId" value="@Profile.ProfileId" />
-                <div class="mb-3">
-                    <label for="accountid" class="form-label">AccountId:</label>
-                    <InputNumber id="accountid" @bind-Value="Profile.AccountId" class="form-control" />
-                    <ValidationMessage For="() => Profile.AccountId" class="text-danger" />
-                </div>
+                <input type="hidden" name="Profile.ProfileId" value="@Profile.AccountId" />
                 <div class="mb-3">
                     <label for="height" class="form-label">Height:</label>
                     <InputNumber id="height" @bind-Value="Profile.Height" class="form-control" />
@@ -44,8 +40,9 @@ else
                     <ValidationMessage For="() => Profile.BirthDate" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="pic" class="form-label">Pic:</label>
-                    <InputText id="pic" @bind-Value="Profile.Pic" class="form-control" />
+                    <label for="profilePicture" class="form-label">Upload Profile Picture:</label>
+                    <InputFile OnChange="OnInputFileChange" />
+                    <img src="@profilePic" alt="Profile Picture" style="width:200px; height:200px;" />
                     <ValidationMessage For="() => Profile.Pic" class="text-danger" />
                 </div>
                 <div class="mb-3">
@@ -78,6 +75,22 @@ else
     [SupplyParameterFromForm]
     public Profile? Profile { get; set; }
 
+    private string base64Image;
+    private string profilePic;
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.OpenReadStream().CopyToAsync(memoryStream);
+            var buffer = memoryStream.ToArray();
+            base64Image = Convert.ToBase64String(buffer);
+            profilePic = $"data:image/png;base64,{base64Image}";
+            Profile.Pic = base64Image;  // Ensure Pic is set
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         Profile ??= await DB.Profiles.FirstOrDefaultAsync(m => m.ProfileId == ProfileId);
@@ -85,6 +98,13 @@ else
         if (Profile is null)
         {
             NavigationManager.NavigateTo("notfound");
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(Profile.Pic))
+            {
+                profilePic = $"data:image/png;base64,{Profile.Pic}";
+            }
         }
     }
 

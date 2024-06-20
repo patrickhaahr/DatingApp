@@ -7,6 +7,8 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
+@using BlazorApp.Services
+@inject ProfileService ProfileService
 
 @inject NavigationManager navigationManager
 @inject DatingAppDbContext appDbContext
@@ -67,6 +69,15 @@
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
         await HttpContext!.SignInAsync(principal);
-        navigationManager.NavigateTo("/createprofile");
+
+        var profile = await ProfileService.GetProfileByAccountIdAsync(account.AccountId);
+        if (profile != null)
+        {
+            navigationManager.NavigateTo("/");
+        }
+        else
+        {
+            navigationManager.NavigateTo("/createprofile");
+        }
     }
 }

@@ -14,11 +14,13 @@
     <AuthorizeView Roles="Administrator,User">
         <Authorized>
                 <a href="accounts" class="text-white font-medium hover:underline">Index</a>
-                <a href="weather" class="text-white font-medium hover:underline">Weather</a>
                 <a href="profiles" class="text-white font-medium hover:underline">Profiles</a>
                 <a href="likes" class="text-white font-medium hover:underline">likes</a>
                 <a href="messages" class="text-white font-medium hover:underline">Messages</a>
         </Authorized>
+            <NotAuthorized>
+                <a href="accounts/create" class="text-white font-medium hover:underline">Create</a>
+            </NotAuthorized>
     </AuthorizeView>
     </nav>
     <AuthorizeView>

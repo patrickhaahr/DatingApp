@@ -28,7 +28,7 @@ namespace BlazorApp.Models
         public DateTime BirthDate { get; set; }
 
         [Required(ErrorMessage = "Username is required.")]
-        [EmailValidation]
+        [UserNameValidation]
         [MaxLength(50, ErrorMessage = "Username cannot be longer than 50 characters.")]
         [MinLength(2, ErrorMessage = "Username must be at least 2 characters long.")]
         [Column(TypeName = "nvarchar(50)")]

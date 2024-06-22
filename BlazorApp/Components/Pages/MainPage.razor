@@ -61,79 +61,78 @@
         </div>
     </div>
 
-    @if (showMessages)
-    {
-        <div class="w-1/2 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 flex flex-col">
+    <div class="flex-1 flex items-center justify-center">
+        @if (showMessages)
+        {
+            <div class="w-1/2 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 flex flex-col">
+                @if (selectedMatch != null)
+                {
+                    <div class="flex items-center mb-4">
+                        <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.NickName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
+                        <span class="font-semibold dark:text-white">You matched with @selectedMatch.NickName on @selectedMatch.Age</span>
+                    </div>
+                }
+                <div class="flex-1 overflow-y-auto">
+                    @foreach (var message in messages)
+                    {
+                        <div class="mb-4">
+                            <div class="bg-zinc-100 dark:bg-zinc-700 p-2 rounded-lg inline-block">
+                                <strong>@message.Sender.UserName:</strong> @message.MessageText
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="flex items-center p-2 border-t border-zinc-200 dark:border-zinc-700">
+                    <InputText @bind-Value="newMessage.MessageText" placeholder="Type a message" class="flex-1 border border-zinc-300 dark:border-zinc-600 rounded-lg p-2 mr-2 dark:bg-zinc-800 dark:text-white" />
+                    <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg" @onclick="SendMessage">SEND</button>
+                </div>
+            </div>
             @if (selectedMatch != null)
             {
-                <div class="flex items-center mb-4">
-                    <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.NickName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
-                    <span class="font-semibold dark:text-white">You matched with @selectedMatch.NickName on @selectedMatch.Age</span>
-                </div>
-            }
-            <div class="flex-1 overflow-y-auto">
-                @foreach (var message in messages)
-                {
-                    <div class="mb-4">
-                        <div class="bg-zinc-100 dark:bg-zinc-700 p-2 rounded-lg inline-block">
-                            <strong>@message.Sender.UserName:</strong> @message.MessageText
-                        </div>
+                <div class="w-1/4 bg-white dark:bg-zinc-800 p-4">
+                    <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.NickName's photo" class="rounded-lg mb-4" style="width: 200px; height: 200px;">
+                    <div class="font-semibold text-xl mb-2 dark:text-white">@selectedMatch.NickName @selectedMatch.Age</div>
+                    <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Height</div>
+                    <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Weight</div>
+                    <div class="flex justify-between">
+                        <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg">UNMATCH</button>
+                        <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg">REPORT</button>
                     </div>
-                }
-            </div>
-            <div class="flex items-center p-2 border-t border-zinc-200 dark:border-zinc-700">
-                <InputText @bind-Value="newMessage.MessageText" placeholder="Type a message" class="flex-1 border border-zinc-300 dark:border-zinc-600 rounded-lg p-2 mr-2 dark:bg-zinc-800 dark:text-white" />
-                <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg" @onclick="SendMessage">SEND</button>
-            </div>
-        </div>
-        @if (selectedMatch != null)
-        {
-            <div class="w-1/4 bg-white dark:bg-zinc-800 p-4">
-                <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.NickName's photo" class="rounded-lg mb-4" style="width: 200px; height: 200px;">
-                <div class="font-semibold text-xl mb-2 dark:text-white">@selectedMatch.NickName @selectedMatch.Age</div>
-                <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Height</div>
-                <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Weight</div>
-                <div class="flex justify-between">
-                    <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg">UNMATCH</button>
-                    <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg">REPORT</button>
                 </div>
-            </div>
+            }
         }
-    }
-    else
-    {
-        <div class="profiles-container">
-            @if (profiles == null)
-            {
-                <p>Loading profiles...</p>
-            }
-            else if (profiles.Count == 0)
-            {
-                <p>No profiles found.</p>
-            }
-            else
-            {
-                @foreach (var profile in profiles)
+        else
+        {
+            <div class="profiles-container flex items-center justify-center h-full w-full">
+                @if (profiles == null)
                 {
-                    <div class="max-w-sm w-full lg:max-w-full lg:flex shadow-lg rounded-lg overflow-hidden">
-                        <img class="h-48 w-full object-cover md:w-48" src="@($"data:image/png;base64,{profile.Pic}")" alt="@profile.NickName's photo">
+                    <p>Loading profiles...</p>
+                }
+                else if (profiles.Count == 0)
+                {
+                    <p>No profiles found.</p>
+                }
+                else
+                {
+                    <div class="max-w-2xl w-full shadow-lg rounded-lg overflow-hidden">
+                        <img class="h-96 w-full object-cover" src="@($"data:image/png;base64,{profiles[0].Pic}")" alt="@profiles[0].NickName's photo">
                         <div class="p-4 flex flex-col justify-between leading-normal">
                             <div class="mb-8">
-                                <div class="text-gray-900 font-bold text-xl mb-2">@profile.NickName, @profile.BirthDate.ToShortDateString()</div>
-                                <p class="text-gray-700 text-base">@profile.Height cm</p>
-                                <p class="text-gray-700 text-base">@profile.Weight kg</p>
-                                <p class="text-gray-700 text-base mt-2">@profile.GenderDisplay</p>
+                                <div class="text-gray-900 font-bold text-2xl mb-2">@profiles[0].NickName, @profiles[0].Age</div>
+                                <p class="text-gray-700 text-base">@profiles[0].Height cm</p>
+                                <p class="text-gray-700 text-base">@profiles[0].Weight kg</p>
+                                <p class="text-gray-700 text-base mt-2">@profiles[0].GenderDisplay</p>
                             </div>
                             <div class="flex justify-around mt-4">
-                                <button class="bg-red-500 text-white p-2 rounded-full text-2xl" @onclick="() => DislikeProfile(profile.ProfileId)">❌</button>
-                                <button class="bg-blue-500 text-white p-2 rounded-full text-2xl" @onclick="() => LikeProfile(profile.ProfileId)">💚</button>
+                                <button class="bg-red-500 text-white p-4 rounded-full text-2xl" @onclick="() => DislikeProfile(profiles[0].ProfileId)" disabled="@isProcessing">❌</button>
+                                <button class="bg-blue-500 text-white p-4 rounded-full text-2xl" @onclick="() => LikeProfile(profiles[0].ProfileId)" disabled="@isProcessing">💚</button>
                             </div>
                         </div>
                     </div>
                 }
-            }
-        </div>
-    }
+            </div>
+        }
+    </div>
 </div>
 
 @code {
@@ -145,6 +144,7 @@
     private Profile selectedMatch;
     private Profile currentUserProfile;
     private bool showMessages = false;
+    private bool isProcessing = false; // Flag to prevent spamming
 
     protected override async Task OnInitializedAsync()
     {
@@ -204,14 +204,20 @@
 
     private async Task LikeProfile(int profileId)
     {
+        if (isProcessing) return; // Prevent spamming
+        isProcessing = true;
         await ProfileService.LikeProfileAsync(profileId);
         profiles = await ProfileService.GetProfilesAsync(); // Refresh the profiles list
+        isProcessing = false;
     }
 
     private async Task DislikeProfile(int profileId)
     {
+        if (isProcessing) return; // Prevent spamming
+        isProcessing = true;
         await ProfileService.DislikeProfileAsync(profileId);
         profiles = await ProfileService.GetProfilesAsync(); // Refresh the profiles list
+        isProcessing = false;
     }
 
     private void ShowProfiles()

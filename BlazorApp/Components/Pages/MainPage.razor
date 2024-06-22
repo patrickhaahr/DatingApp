@@ -100,7 +100,7 @@
                 </div>
                 <div class="flex items-center p-2 border-t border-zinc-200 dark:border-zinc-700">
                     <InputText @bind-Value="newMessage.MessageText" placeholder="Type a message" class="flex-1 border border-zinc-300 dark:border-zinc-600 rounded-lg p-2 mr-2 dark:bg-zinc-800 dark:text-white" />
-                    <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg" @onclick="SendMessage">SEND</button>
+                    <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg" @onclick="SendMessage" disabled="@string.IsNullOrWhiteSpace(newMessage.MessageText)">SEND</button>
                 </div>
             </div>
             @if (selectedMatch != null)
@@ -220,6 +220,9 @@
     private async Task LoadMessages(int matchProfileId)
     {
         selectedProfileMessages = await MessageService.GetMessagesAsync(currentUserId, matchProfileId);
+
+        // Ensure StateHasChanged is called on the main thread
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task LoadMatches()
@@ -237,7 +240,10 @@
 
             await MessageService.SendMessageAsync(newMessage);
             newMessage.MessageText = string.Empty;
-            await LoadMessages(selectedMatch.ProfileId);
+            await LoadMessages(selectedMatch.ProfileId); // Refresh the messages list
+
+            // Ensure StateHasChanged is called on the main thread
+            await InvokeAsync(StateHasChanged);
         }
         else
         {
@@ -307,4 +313,3 @@
         }
     }
 }
-

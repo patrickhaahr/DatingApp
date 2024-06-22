@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="flex justify-around mt-4">
                                     <button class="bg-red-500 text-white p-4 rounded-full text-2xl" @onclick="() => UnmatchProfile(match.ProfileId)" disabled="@isProcessing">❌ Unmatch</button>
-                                    <button class="bg-blue-500 text-white p-4 rounded-full text-2xl" @onclick="() => LikeProfile(match.ProfileId)" disabled="@isProcessing">💚</button>
+                                    <button class="bg-blue-500 text-white p-4 rounded-full text-2xl" @onclick="() => ShowMessagesWithProfile(match.ProfileId)" disabled="@isProcessing">💬 Message</button>
                                 </div>
                             </div>
                         </div>
@@ -259,5 +259,16 @@
     {
         showMessages = false;
         showMatches = true;
+    }
+
+    private async Task ShowMessagesWithProfile(int profileId)
+    {
+        selectedMatch = await ProfileService.GetProfileByIdAsync(profileId);
+        if (selectedMatch != null)
+        {
+            await LoadMessages(profileId);
+            showMessages = true;
+            showMatches = false;
+        }
     }
 }

@@ -45,6 +45,16 @@ namespace BlazorApp.Services
                 .ToListAsync();
         }
 
+        public async Task<List<Message>> GetAllMessagesAsync(int userId)
+        {
+            return await _context.Messages
+                .Include(m => m.Sender)
+                .Include(m => m.Receiver)
+                .Where(m => m.SenderId == userId || m.Receiver.AccountId == userId)
+                .OrderBy(m => m.SentDate)
+                .ToListAsync();
+        }
+
         public async Task<List<Profile>> GetMatchesAsync(int userId)
         {
             var likedByUser = await _context.Likes

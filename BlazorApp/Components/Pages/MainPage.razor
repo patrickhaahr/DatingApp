@@ -44,6 +44,37 @@
             <span class="font-semibold dark:text-white">Messages</span>
             <span class="text-red-500">@messages?.Count</span>
         </div>
+        <div class="overflow-y-auto">
+            @if (matches != null && matches.Count > 0)
+            {
+                @foreach (var match in matches)
+                {
+                    var latestMessage = messages
+                        .Where(m => (m.SenderId == match.ProfileId || m.ReceiverId == match.ProfileId))
+                        .OrderByDescending(m => m.SentDate)
+                        .FirstOrDefault();
+
+                    <div class="flex items-center p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer" @onclick="() => SelectMatch(match.ProfileId)">
+                        <img src="@($"data:image/png;base64,{match.Pic}")" alt="@match.NickName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
+                        <div>
+                            <div class="font-semibold dark:text-white">@match.NickName</div>
+                            @if (latestMessage != null)
+                            {
+                                <div class="text-xs">@latestMessage.MessageText</div>
+                            }
+                            else
+                            {
+                                <div class="text-xs">New Match! Say Hello 👋</div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No matches found.</p>
+            }
+        </div>
     </div>
 
     <div class="flex-1 flex items-center justify-center">
@@ -58,7 +89,7 @@
                     </div>
                 }
                 <div class="flex-1 overflow-y-auto">
-                    @foreach (var message in messages)
+                    @foreach (var message in selectedProfileMessages)
                     {
                         <div class="mb-4">
                             <div class="bg-zinc-100 dark:bg-zinc-700 p-2 rounded-lg inline-block">
@@ -80,7 +111,7 @@
                     <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Height</div>
                     <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Weight</div>
                     <div class="flex justify-between">
-                        <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg">UNMATCH</button>
+                        <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg" @onclick="() => UnmatchProfile(selectedMatch.ProfileId)">UNMATCH</button>
                         <button class="bg-zinc-200 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 px-4 py-2 rounded-lg">REPORT</button>
                     </div>
                 </div>
@@ -156,6 +187,7 @@
 
 @code {
     private List<Message> messages = new List<Message>();
+    private List<Message> selectedProfileMessages = new List<Message>(); // Separate list for selected profile messages
     private List<Profile> matches = new List<Profile>();
     private List<Profile> profiles;
     private Message newMessage = new Message();
@@ -180,13 +212,14 @@
                 await LoadMatches();
                 currentUserProfile = await ProfileService.GetProfileByAccountIdAsync(currentUserId);
                 profiles = await ProfileService.GetProfilesAsync();
+                messages = await MessageService.GetAllMessagesAsync(currentUserId); // Load all messages for the user
             }
         }
     }
 
     private async Task LoadMessages(int matchProfileId)
     {
-        messages = await MessageService.GetMessagesAsync(currentUserId, matchProfileId);
+        selectedProfileMessages = await MessageService.GetMessagesAsync(currentUserId, matchProfileId);
     }
 
     private async Task LoadMatches()
@@ -247,6 +280,8 @@
         await ProfileService.DislikeProfileAsync(profileId);
         matches = await MessageService.GetMatchesAsync(currentUserId); // Refresh the matches list
         isProcessing = false;
+
+        ShowProfiles();
     }
 
     private void ShowProfiles()
@@ -272,3 +307,4 @@
         }
     }
 }
+

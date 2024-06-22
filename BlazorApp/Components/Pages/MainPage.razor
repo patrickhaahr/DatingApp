@@ -37,27 +37,12 @@
             <button class="bg-pink-500 text-white px-4 py-2 rounded-lg" @onclick="ShowProfiles">Discover new matches!</button>
         </div>
         <div class="flex justify-between mb-4">
-            <span class="font-semibold dark:text-white">Matches</span>
+            <button class="font-semibold dark:text-white" @onclick="ShowMatches">Matches</button>
             <span class="text-red-500">@matches?.Count</span>
         </div>
         <div class="flex justify-between mb-4">
             <span class="font-semibold dark:text-white">Messages</span>
             <span class="text-red-500">@messages?.Count</span>
-        </div>
-        <div class="overflow-y-auto">
-            @if (matches != null)
-            {
-                @foreach (var match in matches)
-                {
-                    <div class="flex items-center p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer" @onclick="() => SelectMatch(match.ProfileId)">
-                        <img src="@($"data:image/png;base64,{match.Pic}")" alt="match.NickName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
-                        <div>
-                            <div class="font-semibold dark:text-white">@match.NickName</div>
-                            <div class="text-sm text-zinc-500 dark:text-zinc-400">@match.GenderDisplay</div>
-                        </div>
-                    </div>
-                }
-            }
         </div>
     </div>
 
@@ -100,6 +85,40 @@
                     </div>
                 </div>
             }
+        }
+        else if (showMatches)
+        {
+            <div class="profiles-container flex flex-wrap justify-center h-full w-full">
+                @if (matches == null)
+                {
+                    <p>Loading matches...</p>
+                }
+                else if (matches.Count == 0)
+                {
+                    <p>No matches found.</p>
+                }
+                else
+                {
+                    @foreach (var match in matches)
+                    {
+                        <div class="max-w-xs w-full shadow-lg rounded-lg overflow-hidden m-4">
+                            <img class="h-48 w-full object-cover" src="@($"data:image/png;base64,{match.Pic}")" alt="@match.NickName's photo">
+                            <div class="p-4 flex flex-col justify-between leading-normal">
+                                <div class="mb-8">
+                                    <div class="text-gray-900 font-bold text-xl mb-2">@match.NickName, @match.Age</div>
+                                    <p class="text-gray-700 text-base">@match.Height cm</p>
+                                    <p class="text-gray-700 text-base">@match.Weight kg</p>
+                                    <p class="text-gray-700 text-base mt-2">@match.GenderDisplay</p>
+                                </div>
+                                <div class="flex justify-around mt-4">
+                                    <button class="bg-red-500 text-white p-4 rounded-full text-2xl" @onclick="() => UnmatchProfile(match.ProfileId)" disabled="@isProcessing">❌ Unmatch</button>
+                                    <button class="bg-blue-500 text-white p-4 rounded-full text-2xl" @onclick="() => LikeProfile(match.ProfileId)" disabled="@isProcessing">💚</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
         }
         else
         {
@@ -145,6 +164,7 @@
     private Profile currentUserProfile;
     private bool showMessages = false;
     private bool isProcessing = false; // Flag to prevent spamming
+    private bool showMatches = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -220,8 +240,24 @@
         isProcessing = false;
     }
 
+    private async Task UnmatchProfile(int profileId)
+    {
+        if (isProcessing) return; // Prevent spamming
+        isProcessing = true;
+        await ProfileService.DislikeProfileAsync(profileId);
+        matches = await MessageService.GetMatchesAsync(currentUserId); // Refresh the matches list
+        isProcessing = false;
+    }
+
     private void ShowProfiles()
     {
         showMessages = false;
+        showMatches = false;
+    }
+
+    private void ShowMatches()
+    {
+        showMessages = false;
+        showMatches = true;
     }
 }

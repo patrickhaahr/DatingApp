@@ -143,12 +143,17 @@ namespace BlazorApp.Services
                         ReceiverId = profileId,
                         Status = 0
                     };
-
                     _context.Likes.Add(like);
                 }
                 else
                 {
                     like.Status = 0;
+                }
+
+                var mutualLike = await _context.Likes.FirstOrDefaultAsync(l => l.SenderId == profileId && l.ReceiverId == account.AccountId && l.Status == 2);
+                if (mutualLike != null)
+                {
+                    mutualLike.Status = 1;
                 }
 
                 await _context.SaveChangesAsync();

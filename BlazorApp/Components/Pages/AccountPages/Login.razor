@@ -73,7 +73,7 @@
         var profile = await ProfileService.GetProfileByAccountIdAsync(account.AccountId);
         if (profile != null)
         {
-            navigationManager.NavigateTo("/");
+            navigationManager.NavigateTo("/Main");
         }
         else
         {

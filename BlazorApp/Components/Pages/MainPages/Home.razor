@@ -1,0 +1,29 @@
+﻿@page "/"
+
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="text-center py-16 bg-cover bg-center text-white" style="background-image: url('/images/background.png');">
+            <h1 class="text-5xl font-bold mb-4">Swipe Right®</h1>
+            <a href="accounts/create" class="bg-red-500 text-white px-8 py-4 text-lg rounded-full inline-block">Create account</a>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Inject]
+    private NavigationManager Navigation { get; set; }
+
+    [Inject]
+    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/Main");
+        }
+    }
+}

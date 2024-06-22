@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using BlazorApp.Data;
 
 namespace BlazorApp.Models.Validations
 {
@@ -11,6 +13,13 @@ namespace BlazorApp.Models.Validations
             {
                 return new ValidationResult("Email must contain an '@' character.");
             }
+
+            var dbContext = (DatingAppDbContext)validationContext.GetService(typeof(DatingAppDbContext));
+            if (dbContext.Accounts.Any(a => a.Email == email))
+            {
+                return new ValidationResult("Email already exists.");
+            }
+
             return ValidationResult.Success;
         }
     }

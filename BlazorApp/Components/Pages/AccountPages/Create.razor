@@ -54,18 +54,51 @@
     <a href="/accounts">Back to List</a>
 </div>
 
-@code {
+<!-- Modal for success message -->
+@if (showSuccessModal)
+{
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Success</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Successfully created account! You can log in now. <a href="/Accounts/Login">Click here to log in</a>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                    <button type="button" class="btn btn-primary" @onclick="LoginButton">Go to Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
+@code {
     [SupplyParameterFromForm]
     public Account Account { get; set; } = new();
 
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    private bool showSuccessModal = false;
+
     public async Task AddAccount()
     {
         Account.CreateDate = DateTime.Now; // Set the CreateDate here
         Account.Role = "User"; // Set the Role here
         DB.Accounts.Add(Account);
         await DB.SaveChangesAsync();
-        NavigationManager.NavigateTo("/accounts");
+        showSuccessModal = true;
+    }
+
+    private void CloseModal()
+    {
+        showSuccessModal = false;
+        NavigationManager.NavigateTo("/");
+    }
+    private void LoginButton()
+    {
+        showSuccessModal = false;
+        NavigationManager.NavigateTo("/Accounts/Login");
     }
 }

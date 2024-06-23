@@ -24,6 +24,11 @@ else
                 <ValidationSummary />
                 <input type="hidden" name="Account.AccountId" value="@Account.AccountId" />
                 <div class="mb-3">
+                    <div class="mb-3">
+                        <label for="displayname" class="form-label">DisplayName:</label>
+                        <InputText id="displayname" @bind-Value="Account.DisplayName" class="form-control" />
+                        <ValidationMessage For="() => Account.DisplayName" class="text-danger" />
+                    </div>
                     <label for="birthdate" class="form-label">BirthDate:</label>
                     <InputDate id="birthdate" @bind-Value="Account.BirthDate" class="form-control" />
                     <ValidationMessage For="() => Account.BirthDate" class="text-danger" />

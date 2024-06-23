@@ -23,7 +23,12 @@ else
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <input type="hidden" name="Profile.ProfileId" value="@Profile.ProfileId" />
-                <input type="hidden" name="Profile.ProfileId" value="@Profile.AccountId" />
+                <input type="hidden" name="Profile.AccountId" value="@Profile.AccountId" />
+                <div class="mb-3">
+                    <label for="displayname" class="form-label">DisplayName (Changing this will only update for others):</label>
+                    <InputTextArea id="bio" @bind-Value="Profile.DisplayName" class="form-control" />
+                    <ValidationMessage For="() => Profile.DisplayName" class="text-danger" />
+                </div>
                 <div class="mb-3">
                     <label for="height" class="form-label">Height:</label>
                     <InputNumber id="height" @bind-Value="Profile.Height" class="form-control" />
@@ -44,16 +49,6 @@ else
                     <InputFile OnChange="OnInputFileChange" />
                     <img src="@profilePic" alt="Profile Picture" style="width:200px; height:200px;" />
                     <ValidationMessage For="() => Profile.Pic" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="firstname" class="form-label">FirstName:</label>
-                    <InputText id="firstname" @bind-Value="Profile.FirstName" class="form-control" />
-                    <ValidationMessage For="() => Profile.FirstName" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="lastname" class="form-label">LastName:</label>
-                    <InputText id="lastname" @bind-Value="Profile.LastName" class="form-control" />
-                    <ValidationMessage For="() => Profile.LastName" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="bio" class="form-label">Bio:</label>

@@ -16,17 +16,9 @@ namespace BlazorApp.Models
         [HiddenInput(DisplayValue = false)]
         public int AccountId { get; set; }
 
-        [Required(ErrorMessage = "First name is required.")]
-        [MaxLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
-        [MinLength(2, ErrorMessage = "First name must be at least 2 characters long.")]
-        [Column(TypeName = "nvarchar(50)")]
-        public string? FirstName { get; set; }
-
-        [Required(ErrorMessage = "Last name is required.")]
-        [MaxLength(50, ErrorMessage = "Last name cannot be longer than 50 characters.")]
-        [MinLength(2, ErrorMessage = "Last name must be at least 2 characters long.")]
-        [Column(TypeName = "nvarchar(50)")]
-        public string? LastName { get; set; }
+        [Required]
+        [HiddenInput(DisplayValue = false)]
+        public string DisplayName { get; set; }
 
         [Required(ErrorMessage = "Height is required.")]
         public int Height { get; set; }
@@ -35,8 +27,8 @@ namespace BlazorApp.Models
         public int Weight { get; set; }
 
         [Required(ErrorMessage = "Bio is required.")]
-        [MaxLength(1000, ErrorMessage = "First name cannot be longer than 1000 characters.")]
-        [MinLength(2, ErrorMessage = "First name must be at least 2 characters long.")]
+        [MaxLength(1000, ErrorMessage = "Bio cannot be longer than 1000 characters.")]
+        [MinLength(2, ErrorMessage = "Bio must be at least 2 characters long.")]
         [Column(TypeName = "nvarchar(1000)")]
         public string Bio { get; set; }
 
@@ -81,7 +73,5 @@ namespace BlazorApp.Models
         public int? PreferredMaxAge { get; set; }
         [NotMapped]
         public bool? PreferredGender { get; set; }
-        [NotMapped]
-        public bool PreferredAllGenders { get; set; }
     }
 }

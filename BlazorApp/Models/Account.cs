@@ -8,7 +8,14 @@ namespace BlazorApp.Models
 {
     public class Account
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AccountId { get; set; }
+
+        [Required(ErrorMessage = "Display name is required.")]
+        [MaxLength(50, ErrorMessage = "Display name cannot be longer than 50 characters.")]
+        [MinLength(2, ErrorMessage = "Display name must be at least 2 characters long.")]
+        [Column(TypeName = "nvarchar(50)")]
+        public string DisplayName { get; set; }
 
         [Required(ErrorMessage = "You must specify a birth date.")]
         [DataType(DataType.Date)]

@@ -161,6 +161,11 @@ namespace BlazorApp.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 

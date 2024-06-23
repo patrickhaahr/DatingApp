@@ -59,6 +59,11 @@ else
                     <ValidationMessage For="() => Profile.Gender" class="text-danger" />
                 </div>
                 <div class="mb-3">
+                    <label for="bio" class="form-label">Bio:</label>
+                    <InputTextArea id="bio" @bind-Value="Profile.Bio" class="form-control" />
+                    <ValidationMessage For="() => Profile.Bio" class="text-danger" />
+                </div>
+                <div class="mb-3">
                     <label for="preferredMinHeight" class="form-label">Preferred Min Height:</label>
                     <InputNumber id="preferredMinHeight" @bind-Value="Profile.PreferredMinHeight" class="form-control" />
                     <ValidationMessage For="() => Profile.PreferredMinHeight" class="text-danger" />

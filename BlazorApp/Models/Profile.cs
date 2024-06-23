@@ -9,7 +9,7 @@ namespace BlazorApp.Models
 {
     public class Profile
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProfileId { get; set; }
 
         [Required]
@@ -17,6 +17,12 @@ namespace BlazorApp.Models
         public int AccountId { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
+
+        [Required(ErrorMessage = "Bio is required.")]
+        [MaxLength(1000, ErrorMessage = "First name cannot be longer than 1000 characters.")]
+        [MinLength(2, ErrorMessage = "First name must be at least 2 characters long.")]
+        [Column(TypeName = "nvarchar(1000)")]
+        public string Bio { get; set; }
 
         [Required]
         [HiddenInput(DisplayValue = false)]

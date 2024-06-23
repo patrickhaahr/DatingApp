@@ -29,17 +29,24 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddDbContext<DatingAppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddQuickGridEntityFrameworkAdapter();;
+builder.Services.AddQuickGridEntityFrameworkAdapter();
 
 builder.Services.AddScoped<AuthHelperService>();
 builder.Services.AddScoped<MessageService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<ProfileService>();
+builder.Services.AddScoped<CityService>(); // Ensure CityService is registered
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 builder.Services.AddScoped<DatingAppDbContext>();
 
-
 var app = builder.Build();
+
+// Ensure cities data during startup
+using (var scope = app.Services.CreateScope())
+{
+    var cityService = scope.ServiceProvider.GetRequiredService<CityService>();
+    await cityService.EnsureCitiesDataAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

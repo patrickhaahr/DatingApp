@@ -1,5 +1,6 @@
 ﻿using BlazorApp.Data;
 using BlazorApp.Models;
+using System.Diagnostics;
 
 namespace BlazorApp.Services
 {
@@ -15,6 +16,25 @@ namespace BlazorApp.Services
         public List<City> GetCityAsync()
         {
             return _context.Cities.Select(c => c).ToList();
+        }
+
+        public async Task EnsureCitiesDataAsync()
+        {
+            if (!_context.Cities.Any())
+            {
+                RunBatchFile();
+            }
+        }
+
+        private void RunBatchFile()
+        {
+            ProcessStartInfo processInfo = new ProcessStartInfo("city.cmd")
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+            Process process = Process.Start(processInfo);
+            process.WaitForExit();
         }
     }
 }

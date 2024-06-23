@@ -58,6 +58,44 @@ else
                     </InputRadioGroup>
                     <ValidationMessage For="() => Profile.Gender" class="text-danger" />
                 </div>
+                <div class="mb-3">
+                    <label for="preferredMinHeight" class="form-label">Preferred Min Height:</label>
+                    <InputNumber id="preferredMinHeight" @bind-Value="Profile.PreferredMinHeight" class="form-control" />
+                    <ValidationMessage For="() => Profile.PreferredMinHeight" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="preferredMaxHeight" class="form-label">Preferred Max Height:</label>
+                    <InputNumber id="preferredMaxHeight" @bind-Value="Profile.PreferredMaxHeight" class="form-control" />
+                    <ValidationMessage For="() => Profile.PreferredMaxHeight" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="preferredMinWeight" class="form-label">Preferred Min Weight:</label>
+                    <InputNumber id="preferredMinWeight" @bind-Value="Profile.PreferredMinWeight" class="form-control" />
+                    <ValidationMessage For="() => Profile.PreferredMinWeight" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="preferredMaxWeight" class="form-label">Preferred Max Weight:</label>
+                    <InputNumber id="preferredMaxWeight" @bind-Value="Profile.PreferredMaxWeight" class="form-control" />
+                    <ValidationMessage For="() => Profile.PreferredMaxWeight" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="preferredMinAge" class="form-label">Preferred Min Age:</label>
+                    <InputNumber id="preferredMinAge" @bind-Value="Profile.PreferredMinAge" class="form-control" />
+                    <ValidationMessage For="() => Profile.PreferredMinAge" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="preferredMaxAge" class="form-label">Preferred Max Age:</label>
+                    <InputNumber id="preferredMaxAge" @bind-Value="Profile.PreferredMaxAge" class="form-control" />
+                    <ValidationMessage For="() => Profile.PreferredMaxAge" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="preferredGender" class="form-label">Preferred Gender:</label>
+                    <InputRadioGroup @bind-Value="Profile.PreferredGender" class="form-control">
+                        <InputRadio Value="true" /> Male
+                        <InputRadio Value="false" /> Female
+                    </InputRadioGroup>
+                    <ValidationMessage For="() => Profile.PreferredGender" class="text-danger" />
+                </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>

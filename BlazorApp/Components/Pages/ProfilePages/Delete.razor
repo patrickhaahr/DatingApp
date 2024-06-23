@@ -46,6 +46,22 @@
             <dt class="col-sm-2">Gender</dt>
             <dd class="col-sm-10">@profile.GenderDisplay</dd>
         </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Preferred Min Height</dt>
+            <dd class="col-sm-10">@profile.PreferredMinHeight</dd>
+            <dt class="col-sm-2">Preferred Max Height</dt>
+            <dd class="col-sm-10">@profile.PreferredMaxHeight</dd>
+            <dt class="col-sm-2">Preferred Min Weight</dt>
+            <dd class="col-sm-10">@profile.PreferredMinWeight</dd>
+            <dt class="col-sm-2">Preferred Max Weight</dt>
+            <dd class="col-sm-10">@profile.PreferredMaxWeight</dd>
+            <dt class="col-sm-2">Preferred Min Age</dt>
+            <dd class="col-sm-10">@profile.PreferredMinAge</dd>
+            <dt class="col-sm-2">Preferred Max Age</dt>
+            <dd class="col-sm-10">@profile.PreferredMaxAge</dd>
+            <dt class="col-sm-2">Preferred Gender</dt>
+            <dd class="col-sm-10">@profile.PreferredGender</dd>
+        </dl>
         <EditForm method="post" Model="profile" OnValidSubmit="DeleteProfile" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(profile is null)">Delete</button> |
             <a href="/profiles">Back to List</a>

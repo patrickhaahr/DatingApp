@@ -83,15 +83,31 @@ namespace BlazorApp.Services
             var account = await _authHelperService.GetAuthenticatedAccountAsync();
             if (account != null)
             {
+                var currentUserProfile = await GetProfileByAccountIdAsync(account.AccountId);
                 var likedProfiles = await _context.Likes
-                    .Where(l => l.SenderId == account.AccountId && l.Status != -1) // Exclude profiles with status other than -1
+                    .Where(l => l.SenderId == account.AccountId && l.Status != -1)
                     .Select(l => l.ReceiverId)
                     .ToListAsync();
 
-                return await _context.Profiles
+                var profiles = await _context.Profiles
                     .Include(p => p.Account)
-                    .Where(p => p.AccountId != account.AccountId && !likedProfiles.Contains(p.ProfileId)) // Exclude the logged-in user's profile
+                    .Where(p => p.AccountId != account.AccountId && !likedProfiles.Contains(p.ProfileId))
                     .ToListAsync();
+
+                if (currentUserProfile != null)
+                {
+                    profiles = profiles.Where(p =>
+                        (!currentUserProfile.PreferredMinHeight.HasValue || p.Height >= currentUserProfile.PreferredMinHeight) &&
+                        (!currentUserProfile.PreferredMaxHeight.HasValue || p.Height <= currentUserProfile.PreferredMaxHeight) &&
+                        (!currentUserProfile.PreferredMinWeight.HasValue || p.Weight >= currentUserProfile.PreferredMinWeight) &&
+                        (!currentUserProfile.PreferredMaxWeight.HasValue || p.Weight <= currentUserProfile.PreferredMaxWeight) &&
+                        (!currentUserProfile.PreferredMinAge.HasValue || p.Age >= currentUserProfile.PreferredMinAge) &&
+                        (!currentUserProfile.PreferredMaxAge.HasValue || p.Age <= currentUserProfile.PreferredMaxAge) &&
+                        (!currentUserProfile.PreferredGender.HasValue || p.Gender == currentUserProfile.PreferredGender)
+                    ).ToList();
+                }
+
+                return profiles;
             }
 
             return new List<Profile>();

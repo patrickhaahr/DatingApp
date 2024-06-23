@@ -47,5 +47,22 @@ namespace BlazorApp.Models
 
         [NotMapped]
         public int Age => DateTime.Now.Year - BirthDate.Year - (DateTime.Now.DayOfYear < BirthDate.DayOfYear ? 1 : 0); // Computed property for age
+
+        [NotMapped]
+        public int? PreferredMinHeight { get; set; }
+        [NotMapped]
+        public int? PreferredMaxHeight { get; set; }
+        [NotMapped]
+        public int? PreferredMinWeight { get; set; }
+        [NotMapped]
+        public int? PreferredMaxWeight { get; set; }
+        [NotMapped]
+        public int? PreferredMinAge { get; set; }
+        [NotMapped]
+        public int? PreferredMaxAge { get; set; }
+        [NotMapped]
+        public bool? PreferredGender { get; set; }
+        [NotMapped]
+        public bool PreferredAllGenders { get; set; }
     }
 }

@@ -40,6 +40,24 @@
         }
     </select>
 
+    <h3>What are you looking for?</h3>
+    <label>Preferred Min Height:</label>
+    <InputNumber @bind-Value="Profile.PreferredMinHeight" />
+    <label>Preferred Max Height:</label>
+    <InputNumber @bind-Value="Profile.PreferredMaxHeight" />
+    <label>Preferred Min Weight:</label>
+    <InputNumber @bind-Value="Profile.PreferredMinWeight" />
+    <label>Preferred Max Weight:</label>
+    <InputNumber @bind-Value="Profile.PreferredMaxWeight" />
+    <label>Preferred Min Age:</label>
+    <InputNumber @bind-Value="Profile.PreferredMinAge" />
+    <label>Preferred Max Age:</label>
+    <InputNumber @bind-Value="Profile.PreferredMaxAge" />
+    <label>Preferred Gender:</label>
+    <InputRadioGroup @bind-Value="Profile.PreferredGender">
+        <InputRadio Value="true" /> Male
+        <InputRadio Value="false" /> Female
+    </InputRadioGroup>
 
     <button type="submit">Create Profile</button>
 </EditForm>

@@ -8,7 +8,7 @@
 @rendermode InteractiveServer
 @using Microsoft.AspNetCore.Authorization
 @attribute [StreamRendering]
-@attribute [Authorize(Roles = "User")]
+@attribute [Authorize(Roles = "Administrator, User")]
 
 <div class="flex h-screen">
     <div class="w-1/4 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4">

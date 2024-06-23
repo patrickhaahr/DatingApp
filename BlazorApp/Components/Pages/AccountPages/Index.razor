@@ -3,6 +3,9 @@
 @inject BlazorApp.Data.DatingAppDbContext DB
 @using BlazorApp.Models
 @rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [StreamRendering]
+@attribute [Authorize(Roles = "Administrator")]
 
 <PageTitle>Index</PageTitle>
 

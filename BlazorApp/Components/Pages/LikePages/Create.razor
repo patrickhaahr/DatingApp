@@ -3,6 +3,9 @@
 @using BlazorApp.Models
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [StreamRendering]
+@attribute [Authorize(Roles = "Administrator")]
 
 <PageTitle>Create</PageTitle>
 

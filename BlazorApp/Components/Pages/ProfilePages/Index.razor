@@ -6,6 +6,9 @@
 @using BlazorApp.Models
 @using Microsoft.EntityFrameworkCore
 @rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [StreamRendering]
+@attribute [Authorize(Roles = "Administrator")]
 
 <PageTitle>Index</PageTitle>
 

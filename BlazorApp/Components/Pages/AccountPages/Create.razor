@@ -14,17 +14,12 @@
     <div class="col-md-4">
         <EditForm method="post" Model="Account" OnValidSubmit="AddAccount" FormName="create" Enhance>
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" />
+            <ValidationSummary class="text-danger" /> 
             <div class="mb-3">
-                <label for="firstname" class="form-label">FirstName:</label> 
-                <InputText id="firstname" @bind-Value="Account.FirstName" class="form-control" /> 
-                <ValidationMessage For="() => Account.FirstName" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="lastname" class="form-label">LastName:</label> 
-                <InputText id="lastname" @bind-Value="Account.LastName" class="form-control" /> 
-                <ValidationMessage For="() => Account.LastName" class="text-danger" /> 
-            </div>        
+                <label for="displayname" class="form-label">Display Name:</label>
+                <InputText id="displayname" @bind-Value="Account.DisplayName" class="form-control" />
+                <ValidationMessage For="() => Account.DisplayName" class="text-danger" />
+            </div>
             <div class="mb-3">
                 <label for="birthdate" class="form-label">BirthDate:</label> 
                 <InputDate id="birthdate" @bind-Value="Account.BirthDate" class="form-control" /> 

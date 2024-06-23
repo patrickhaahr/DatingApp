@@ -9,14 +9,28 @@ namespace BlazorApp.Models
 {
     public class Profile
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProfileId { get; set; }
 
         [Required]
         [HiddenInput(DisplayValue = false)]
         public int AccountId { get; set; }
+
+        [Required]
+        [HiddenInput(DisplayValue = false)]
+        public string DisplayName { get; set; }
+
+        [Required(ErrorMessage = "Height is required.")]
         public int Height { get; set; }
+
+        [Required(ErrorMessage = "Weight is required.")]
         public int Weight { get; set; }
+
+        [Required(ErrorMessage = "Bio is required.")]
+        [MaxLength(1000, ErrorMessage = "Bio cannot be longer than 1000 characters.")]
+        [MinLength(2, ErrorMessage = "Bio must be at least 2 characters long.")]
+        [Column(TypeName = "nvarchar(1000)")]
+        public string Bio { get; set; }
 
         [Required]
         [HiddenInput(DisplayValue = false)]
@@ -24,9 +38,6 @@ namespace BlazorApp.Models
 
         [HiddenInput(DisplayValue = false)]
         public string? Pic { get; set; }
-
-        [Required]
-        public string NickName { get; set; }
 
         [Required]
         public bool Gender { get; set; }
@@ -62,7 +73,5 @@ namespace BlazorApp.Models
         public int? PreferredMaxAge { get; set; }
         [NotMapped]
         public bool? PreferredGender { get; set; }
-        [NotMapped]
-        public bool PreferredAllGenders { get; set; }
     }
 }

@@ -19,7 +19,7 @@ RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutab
 <Node Id = "Account.CreateDate" Label="CreateDate (DateTime)" Name="CreateDate" Category="Property Required" Type="DateTime" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
 <Node Id = "Account.Email" Label="Email (string)" Name="Email" Category="Property Required" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
 Relational:ColumnType: nvarchar(50)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
-<Node Id = "Account.FirstName" Label="FirstName (string)" Name="FirstName" Category="Property Required" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+<Node Id = "Account.DisplayName" Label="DisplayName (string)" Name="DisplayName" Category="Property Required" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
 Relational:ColumnType: nvarchar(50)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
 <Node Id = "Account.LastName" Label="LastName (string)" Name="LastName" Category="Property Required" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
 Relational:ColumnType: nvarchar(50)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
@@ -82,7 +82,7 @@ RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutab
 <Link Source = "Account" Target="Account.BirthDate" Category="Contains" />
 <Link Source = "Account" Target="Account.CreateDate" Category="Contains" />
 <Link Source = "Account" Target="Account.Email" Category="Contains" />
-<Link Source = "Account" Target="Account.FirstName" Category="Contains" />
+<Link Source = "Account" Target="Account.DisplayName" Category="Contains" />
 <Link Source = "Account" Target="Account.LastName" Category="Contains" />
 <Link Source = "Account" Target="Account.Password" Category="Contains" />
 <Link Source = "Account" Target="Account.Role" Category="Contains" />

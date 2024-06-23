@@ -23,7 +23,12 @@ else
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <input type="hidden" name="Profile.ProfileId" value="@Profile.ProfileId" />
-                <input type="hidden" name="Profile.ProfileId" value="@Profile.AccountId" />
+                <input type="hidden" name="Profile.AccountId" value="@Profile.AccountId" />
+                <div class="mb-3">
+                    <label for="displayname" class="form-label">DisplayName (Changing this will only update for others):</label>
+                    <InputTextArea id="bio" @bind-Value="Profile.DisplayName" class="form-control" />
+                    <ValidationMessage For="() => Profile.DisplayName" class="text-danger" />
+                </div>
                 <div class="mb-3">
                     <label for="height" class="form-label">Height:</label>
                     <InputNumber id="height" @bind-Value="Profile.Height" class="form-control" />
@@ -46,9 +51,9 @@ else
                     <ValidationMessage For="() => Profile.Pic" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="nickname" class="form-label">NickName:</label>
-                    <InputText id="nickname" @bind-Value="Profile.NickName" class="form-control" />
-                    <ValidationMessage For="() => Profile.NickName" class="text-danger" />
+                    <label for="bio" class="form-label">Bio:</label>
+                    <InputTextArea id="bio" @bind-Value="Profile.Bio" class="form-control" />
+                    <ValidationMessage For="() => Profile.Bio" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="gender" class="form-label">Gender:</label>

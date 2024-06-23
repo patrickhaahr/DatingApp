@@ -18,8 +18,7 @@
     <Antiforgery />
     <DataAnnotationsValidator />
     <ValidationSummary />
-
-    <InputText @bind-Value="Profile.NickName" placeholder="NickName" />
+    <InputText @bind-Value="Profile.DisplayName" placeholder="Display name" />
     <InputNumber @bind-Value="Profile.Height" placeholder="Height" />
     <InputNumber @bind-Value="Profile.Weight" placeholder="Weight" />
     <label for="profilePicture">Upload Profile Picture:</label>
@@ -39,6 +38,9 @@
             <option value="@city.ZipCode">@city.CityName (@city.ZipCode)</option>
         }
     </select>
+
+    <label for="bio">Bio:</label>
+    <InputTextArea id="bio" @bind-Value="Profile.Bio" class="form-control" />
 
     <h3>What are you looking for?</h3>
     <label>Preferred Min Height:</label>
@@ -116,6 +118,7 @@
                 Profile.AccountId = account.AccountId;
                 Profile.ProfileId = account.AccountId;
                 Profile.BirthDate = account.BirthDate;
+                Profile.DisplayName = account.DisplayName; // Set DisplayName
                 Profile.Pic = base64Image;  // Ensure Pic is set
 
                 await ProfileService.AddProfileAsync(Profile);

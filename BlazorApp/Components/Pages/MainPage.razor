@@ -55,9 +55,9 @@
                         .FirstOrDefault();
 
                     <div class="flex items-center p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer" @onclick="() => SelectMatch(match.ProfileId)">
-                        <img src="@($"data:image/png;base64,{match.Pic}")" alt="@match.NickName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
+                        <img src="@($"data:image/png;base64,{match.Pic}")" alt="@match.FirstName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
                         <div>
-                            <div class="font-semibold dark:text-white">@match.NickName</div>
+                            <div class="font-semibold dark:text-white">@match.FirstName</div>
                             @if (latestMessage != null)
                             {
                                 <div class="text-xs">@latestMessage.MessageText</div>
@@ -84,8 +84,8 @@
                 @if (selectedMatch != null)
                 {
                     <div class="flex items-center mb-4">
-                        <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.NickName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
-                        <span class="font-semibold dark:text-white">You matched with @selectedMatch.NickName on @selectedMatch.Age</span>
+                        <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.FirstName's photo" class="rounded-full mr-2" style="width: 40px; height: 40px;">
+                        <span class="font-semibold dark:text-white">You matched with @selectedMatch.FirstName on @selectedMatch.Age</span>
                     </div>
                 }
                 <div class="flex-1 overflow-y-auto">
@@ -106,8 +106,8 @@
             @if (selectedMatch != null)
             {
                 <div class="w-1/4 bg-white dark:bg-zinc-800 p-4">
-                    <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.NickName's photo" class="rounded-lg mb-4" style="width: 200px; height: 200px;">
-                    <div class="font-semibold text-xl mb-2 dark:text-white">@selectedMatch.NickName @selectedMatch.Age</div>
+                    <img src="@($"data:image/png;base64,{selectedMatch.Pic}")" alt="@selectedMatch.FirstName's photo" class="rounded-lg mb-4" style="width: 200px; height: 200px;">
+                    <div class="font-semibold text-xl mb-2 dark:text-white">@selectedMatch.FirstName @selectedMatch.Age</div>
                     <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Height cm</div>
                     <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Weight kg</div>
                     <div class="text-zinc-500 dark:text-zinc-400 mb-4">@selectedMatch.Bio</div>
@@ -134,10 +134,10 @@
                     @foreach (var match in matches)
                     {
                         <div class="max-w-xs w-full shadow-lg rounded-lg overflow-hidden m-4">
-                            <img class="h-48 w-full object-cover" src="@($"data:image/png;base64,{match.Pic}")" alt="@match.NickName's photo">
+                            <img class="h-48 w-full object-cover" src="@($"data:image/png;base64,{match.Pic}")" alt="@match.FirstName's photo">
                             <div class="p-4 flex flex-col justify-between leading-normal">
                                 <div class="mb-8">
-                                    <div class="text-gray-900 font-bold text-xl mb-2">@match.NickName, @match.Age</div>
+                                    <div class="text-gray-900 font-bold text-xl mb-2">@match.FirstName, @match.Age</div>
                                     <p class="text-gray-700 text-base">@match.Height cm</p>
                                     <p class="text-gray-700 text-base">@match.Weight kg</p>
                                     <p class="text-gray-700 text-base">@match.Bio</p>
@@ -167,10 +167,10 @@
                 else
                 {
                     <div class="max-w-2xl w-full shadow-lg rounded-lg overflow-hidden">
-                        <img class="h-96 w-full object-cover" src="@($"data:image/png;base64,{profiles[0].Pic}")" alt="@profiles[0].NickName's photo">
+                        <img class="h-96 w-full object-cover" src="@($"data:image/png;base64,{profiles[0].Pic}")" alt="@profiles[0].FirstName's photo">
                         <div class="p-4 flex flex-col justify-between leading-normal">
                             <div class="mb-8">
-                                <div class="text-gray-900 font-bold text-2xl mb-2">@profiles[0].NickName, @profiles[0].Age</div>
+                                <div class="text-gray-900 font-bold text-2xl mb-2">@profiles[0].FirstName, @profiles[0].Age</div>
                                 <p class="text-gray-700 text-base">@profiles[0].Height cm</p>
                                 <p class="text-gray-700 text-base">@profiles[0].Weight kg</p>
                                 <p class="text-gray-700 text-base">@profiles[0].Bio</p>
@@ -316,3 +316,4 @@
         }
     }
 }
+

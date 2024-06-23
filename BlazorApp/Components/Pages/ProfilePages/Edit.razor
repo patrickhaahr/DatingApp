@@ -46,9 +46,19 @@ else
                     <ValidationMessage For="() => Profile.Pic" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="nickname" class="form-label">NickName:</label>
-                    <InputText id="nickname" @bind-Value="Profile.NickName" class="form-control" />
-                    <ValidationMessage For="() => Profile.NickName" class="text-danger" />
+                    <label for="firstname" class="form-label">FirstName:</label>
+                    <InputText id="firstname" @bind-Value="Profile.FirstName" class="form-control" />
+                    <ValidationMessage For="() => Profile.FirstName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">LastName:</label>
+                    <InputText id="lastname" @bind-Value="Profile.LastName" class="form-control" />
+                    <ValidationMessage For="() => Profile.LastName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="bio" class="form-label">Bio:</label>
+                    <InputTextArea id="bio" @bind-Value="Profile.Bio" class="form-control" />
+                    <ValidationMessage For="() => Profile.Bio" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="gender" class="form-label">Gender:</label>
@@ -57,11 +67,6 @@ else
                         <InputRadio Value="false" /> Female
                     </InputRadioGroup>
                     <ValidationMessage For="() => Profile.Gender" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="bio" class="form-label">Bio:</label>
-                    <InputTextArea id="bio" @bind-Value="Profile.Bio" class="form-control" />
-                    <ValidationMessage For="() => Profile.Bio" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="preferredMinHeight" class="form-label">Preferred Min Height:</label>

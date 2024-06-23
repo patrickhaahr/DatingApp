@@ -35,7 +35,8 @@ builder.Services.AddScoped<AuthHelperService>();
 builder.Services.AddScoped<MessageService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<ProfileService>();
-builder.Services.AddScoped<CityService>(); // Ensure CityService is registered
+builder.Services.AddScoped<DataInitializationService>(); // Register the new service
+builder.Services.AddScoped<CityService>(); // Ensure CityService is registered after DataInitializationService
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 builder.Services.AddScoped<DatingAppDbContext>();
 

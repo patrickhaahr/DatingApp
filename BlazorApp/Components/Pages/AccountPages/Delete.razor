@@ -71,6 +71,28 @@
 
     public async Task DeleteAccount()
     {
+        var profile = await DB.Profiles.FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
+        if (profile != null)
+        {
+            // Delete related Likes where the profile is the receiver
+            var likesAsReceiver = await DB.Likes.Where(l => l.ReceiverId == profile.ProfileId).ToListAsync();
+            DB.Likes.RemoveRange(likesAsReceiver);
+
+            // Delete related Likes where the profile is the sender
+            var likesAsSender = await DB.Likes.Where(l => l.SenderId == profile.ProfileId).ToListAsync();
+            DB.Likes.RemoveRange(likesAsSender);
+
+            // Delete related Messages where the profile is the receiver
+            var messagesAsReceiver = await DB.Messages.Where(m => m.ReceiverId == profile.ProfileId).ToListAsync();
+            DB.Messages.RemoveRange(messagesAsReceiver);
+
+            // Delete related Messages where the profile is the sender
+            var messagesAsSender = await DB.Messages.Where(m => m.SenderId == profile.ProfileId).ToListAsync();
+            DB.Messages.RemoveRange(messagesAsSender);
+
+            DB.Profiles.Remove(profile);
+        }
+
         DB.Accounts.Remove(account!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/accounts");

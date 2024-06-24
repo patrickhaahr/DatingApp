@@ -54,7 +54,7 @@ BlazorApp is a web application built using Blazor and Entity Framework Core. It 
 - **Database Connection**: Update the connection string in `appsettings.json` to point to your SQL Server instance.
 - **Update Paths**:
   - **city.cmd**: Update the path to the `PostNr.txt` file.
-  -   - **SQLQueryInsert100AccountsAndProfiles.sql**: Ensure the database name and paths are correct.
+  - **Datainitialization.bat**: Ensure the database name and paths are correct.
 ## Usage
 
 - Navigate to the home page to create an account or log in.

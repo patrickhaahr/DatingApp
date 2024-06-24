@@ -107,6 +107,10 @@ namespace BlazorApp.Services
                     ).ToList();
                 }
 
+                // Shuffle the profiles list
+                var random = new Random();
+                profiles = profiles.OrderBy(p => random.Next()).ToList();
+
                 return profiles;
             }
 

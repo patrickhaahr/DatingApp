@@ -25,7 +25,7 @@ else
                 <input type="hidden" name="Profile.ProfileId" value="@Profile.ProfileId" />
                 <input type="hidden" name="Profile.AccountId" value="@Profile.AccountId" />
                 <div class="mb-3">
-                    <label for="displayname" class="form-label">DisplayName (Changing this will only update for others):</label>
+                    <label for="displayname" class="form-label">DisplayName (Changing this will only update for others. Edit account to update displayname for you):</label>
                     <InputTextArea id="bio" @bind-Value="Profile.DisplayName" class="form-control" />
                     <ValidationMessage For="() => Profile.DisplayName" class="text-danger" />
                 </div>
@@ -164,6 +164,12 @@ else
 
     public async Task UpdateProfile()
     {
+        if (!ProfileExists(Profile!.ProfileId))
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
         DB.Attach(Profile!).State = EntityState.Modified;
 
         try
@@ -172,14 +178,7 @@ else
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!ProfileExists(Profile!.ProfileId))
-            {
-                NavigationManager.NavigateTo("notfound");
-            }
-            else
-            {
-                throw;
-            }
+            throw;
         }
 
         NavigationManager.NavigateTo("/");

@@ -68,10 +68,14 @@ else
         }
     }
 
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see https://aka.ms/RazorPagesCRUD.
     public async Task UpdateLike()
     {
+        if (!LikeExists(Like!.LikeId))
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
         DB.Attach(Like!).State = EntityState.Modified;
 
         try
@@ -80,14 +84,7 @@ else
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!LikeExists(Like!.LikeId))
-            {
-                NavigationManager.NavigateTo("notfound");
-            }
-            else
-            {
-                throw;
-            }
+            throw;
         }
 
         NavigationManager.NavigateTo("/likes");

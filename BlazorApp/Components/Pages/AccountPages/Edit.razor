@@ -82,6 +82,12 @@ else
 
     public async Task UpdateAccount()
     {
+        if (!AccountExists(Account!.AccountId))
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
         DB.Attach(Account!).State = EntityState.Modified;
 
         try
@@ -90,14 +96,7 @@ else
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!AccountExists(Account!.AccountId))
-            {
-                NavigationManager.NavigateTo("notfound");
-            }
-            else
-            {
-                throw;
-            }
+            throw;
         }
 
         NavigationManager.NavigateTo("/accounts");
@@ -105,30 +104,34 @@ else
 
     public async Task DeleteAccount()
     {
-        var profile = await DB.Profiles.FirstOrDefaultAsync(p => p.AccountId == Account.AccountId);
-        if (profile != null)
+        using var transaction = await DB.Database.BeginTransactionAsync();
+        try
         {
-            // Delete related Likes where the profile is the receiver
-            var likesAsReceiver = await DB.Likes.Where(l => l.ReceiverId == profile.ProfileId).ToListAsync();
-            DB.Likes.RemoveRange(likesAsReceiver);
+            var profile = await DB.Profiles.FirstOrDefaultAsync(p => p.AccountId == Account.AccountId);
+            if (profile != null)
+            {
+                var likes = await DB.Likes
+                    .Where(l => l.ReceiverId == profile.ProfileId || l.SenderId == profile.ProfileId)
+                    .ToListAsync();
+                DB.Likes.RemoveRange(likes);
 
-            // Delete related Likes where the profile is the sender
-            var likesAsSender = await DB.Likes.Where(l => l.SenderId == profile.ProfileId).ToListAsync();
-            DB.Likes.RemoveRange(likesAsSender);
+                var messages = await DB.Messages
+                    .Where(m => m.ReceiverId == profile.ProfileId || m.SenderId == profile.ProfileId)
+                    .ToListAsync();
+                DB.Messages.RemoveRange(messages);
 
-            // Delete related Messages where the profile is the receiver
-            var messagesAsReceiver = await DB.Messages.Where(m => m.ReceiverId == profile.ProfileId).ToListAsync();
-            DB.Messages.RemoveRange(messagesAsReceiver);
+                DB.Profiles.Remove(profile);
+            }
 
-            // Delete related Messages where the profile is the sender
-            var messagesAsSender = await DB.Messages.Where(m => m.SenderId == profile.ProfileId).ToListAsync();
-            DB.Messages.RemoveRange(messagesAsSender);
-
-            DB.Profiles.Remove(profile);
+            DB.Accounts.Remove(Account!);
+            await DB.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
-
-        DB.Accounts.Remove(Account!);
-        await DB.SaveChangesAsync();
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
 
         NavigationManager.NavigateTo("/");
     }

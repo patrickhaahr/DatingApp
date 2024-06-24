@@ -57,7 +57,8 @@ namespace BlazorApp.Migrations
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Pic = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<bool>(type: "bit", nullable: false),
-                    ZipCode = table.Column<int>(type: "int", nullable: false)
+                    ZipCode = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

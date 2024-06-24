@@ -41,6 +41,7 @@ namespace BlazorApp.Models
 
         [Required]
         public bool Gender { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         [ForeignKey("AccountId")]
         public Account Account { get; set; }
@@ -73,7 +74,5 @@ namespace BlazorApp.Models
         public int? PreferredMaxAge { get; set; }
         [NotMapped]
         public bool? PreferredGender { get; set; }
-
-        public bool IsDeleted { get; set; } = false;
     }
 }

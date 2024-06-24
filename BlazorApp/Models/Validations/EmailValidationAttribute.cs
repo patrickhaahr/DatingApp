@@ -15,7 +15,9 @@ namespace BlazorApp.Models.Validations
             }
 
             var dbContext = (DatingAppDbContext)validationContext.GetService(typeof(DatingAppDbContext));
-            if (dbContext.Accounts.Any(a => a.Email == email))
+            var accountId = (int)validationContext.ObjectType.GetProperty("AccountId").GetValue(validationContext.ObjectInstance, null);
+
+            if (dbContext.Accounts.Any(a => a.Email == email && a.AccountId != accountId))
             {
                 return new ValidationResult("Email already exists.");
             }

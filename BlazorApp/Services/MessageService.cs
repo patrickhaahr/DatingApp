@@ -1,4 +1,5 @@
 ﻿using BlazorApp.Models;
+using BlazorApp.Models.Enums;
 using BlazorApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -58,12 +59,12 @@ namespace BlazorApp.Services
         public async Task<List<Profile>> GetMatchesAsync(int userId)
         {
             var likedByUser = await _context.Likes
-                .Where(l => l.SenderId == userId && l.Status == 2)
+                .Where(l => l.SenderId == userId && l.Status == LikeStatus.Match)
                 .Select(l => l.ReceiverId)
                 .ToListAsync();
 
             var likedUser = await _context.Likes
-                .Where(l => l.ReceiverId == userId && l.Status == 2)
+                .Where(l => l.ReceiverId == userId && l.Status == LikeStatus.Match)
                 .Select(l => l.SenderId)
                 .ToListAsync();
 

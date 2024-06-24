@@ -18,7 +18,7 @@ namespace BlazorApp.Services
         }
         public async Task<List<Profile>> GetProfilesWithCitiesAsync()
         {
-            return await _context.Profiles.Include(p => p.City).ToListAsync();
+            return await _context.Profiles.Include(p => p.City).Where(p => !p.IsDeleted).ToListAsync();
         }
         public async Task AddProfileAsync(Profile profile)
         {

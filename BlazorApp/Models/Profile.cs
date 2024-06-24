@@ -73,5 +73,7 @@ namespace BlazorApp.Models
         public int? PreferredMaxAge { get; set; }
         [NotMapped]
         public bool? PreferredGender { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
     }
 }

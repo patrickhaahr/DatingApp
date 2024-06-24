@@ -23,6 +23,8 @@ else
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <input type="hidden" name="Account.AccountId" value="@Account.AccountId" />
+                <input type="hidden" name="Account.CreateDate" value="@Account.CreateDate" />
+                <input type="hidden" name="Account.Role" value="@Account.Role" />
                 <div class="mb-3">
                     <div class="mb-3">
                         <label for="displayname" class="form-label">DisplayName:</label>
@@ -48,17 +50,10 @@ else
                     <InputText id="password" @bind-Value="Account.Password" class="form-control" />
                     <ValidationMessage For="() => Account.Password" class="text-danger" />
                 </div>
-                <div class="mb-3">
-                    <label for="createdate" class="form-label">CreateDate:</label>
-                    <InputDate id="createdate" @bind-Value="Account.CreateDate" class="form-control" />
-                    <ValidationMessage For="() => Account.CreateDate" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="role" class="form-label">Role:</label>
-                    <InputText id="role" @bind-Value="Account.Role" class="form-control" />
-                    <ValidationMessage For="() => Account.Role" class="text-danger" />
-                </div>
                 <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+            <EditForm method="post" Model="Account" OnValidSubmit="DeleteAccount" FormName="delete" Enhance>
+                <button type="submit" class="btn btn-danger" disabled="@(Account is null)">Delete</button>
             </EditForm>
         </div>
     </div>
@@ -85,8 +80,6 @@ else
         }
     }
 
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see https://aka.ms/RazorPagesCRUD.
     public async Task UpdateAccount()
     {
         DB.Attach(Account!).State = EntityState.Modified;
@@ -108,6 +101,36 @@ else
         }
 
         NavigationManager.NavigateTo("/accounts");
+    }
+
+    public async Task DeleteAccount()
+    {
+        var profile = await DB.Profiles.FirstOrDefaultAsync(p => p.AccountId == Account.AccountId);
+        if (profile != null)
+        {
+            // Delete related Likes where the profile is the receiver
+            var likesAsReceiver = await DB.Likes.Where(l => l.ReceiverId == profile.ProfileId).ToListAsync();
+            DB.Likes.RemoveRange(likesAsReceiver);
+
+            // Delete related Likes where the profile is the sender
+            var likesAsSender = await DB.Likes.Where(l => l.SenderId == profile.ProfileId).ToListAsync();
+            DB.Likes.RemoveRange(likesAsSender);
+
+            // Delete related Messages where the profile is the receiver
+            var messagesAsReceiver = await DB.Messages.Where(m => m.ReceiverId == profile.ProfileId).ToListAsync();
+            DB.Messages.RemoveRange(messagesAsReceiver);
+
+            // Delete related Messages where the profile is the sender
+            var messagesAsSender = await DB.Messages.Where(m => m.SenderId == profile.ProfileId).ToListAsync();
+            DB.Messages.RemoveRange(messagesAsSender);
+
+            DB.Profiles.Remove(profile);
+        }
+
+        DB.Accounts.Remove(Account!);
+        await DB.SaveChangesAsync();
+
+        NavigationManager.NavigateTo("/");
     }
 
     bool AccountExists(int accountid)

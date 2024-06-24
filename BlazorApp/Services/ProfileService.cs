@@ -18,7 +18,7 @@ namespace BlazorApp.Services
         }
         public async Task<List<Profile>> GetProfilesWithCitiesAsync()
         {
-            return await _context.Profiles.Include(p => p.City).ToListAsync();
+            return await _context.Profiles.Include(p => p.City).Where(p => !p.IsDeleted).ToListAsync();
         }
         public async Task AddProfileAsync(Profile profile)
         {
@@ -106,6 +106,10 @@ namespace BlazorApp.Services
                         (!currentUserProfile.PreferredGender.HasValue || p.Gender == currentUserProfile.PreferredGender)
                     ).ToList();
                 }
+
+                // Shuffle the profiles list
+                var random = new Random();
+                profiles = profiles.OrderBy(p => random.Next()).ToList();
 
                 return profiles;
             }

@@ -103,6 +103,17 @@ else
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
+            <EditForm method="post" Model="Profile" OnValidSubmit="ToggleProfileStatus" FormName="toggleStatus" Enhance>
+                @if (Profile.IsDeleted)
+                {
+                    <button type="submit" class="btn btn-success" disabled="@(Profile is null)">Activate</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-danger" disabled="@(Profile is null)">Deactivate</button>
+                }
+            </EditForm>
+            <a href="/accounts/edit?accountid=@Profile.AccountId" class="btn btn-secondary mt-3">Edit Account</a>
         </div>
     </div>
 }
@@ -151,8 +162,6 @@ else
         }
     }
 
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see https://aka.ms/RazorPagesCRUD.
     public async Task UpdateProfile()
     {
         DB.Attach(Profile!).State = EntityState.Modified;
@@ -173,7 +182,19 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/profiles");
+        NavigationManager.NavigateTo("/");
+    }
+
+    public async Task ToggleProfileStatus()
+    {
+        if (Profile != null)
+        {
+            // Toggle the IsDeleted status
+            Profile.IsDeleted = !Profile.IsDeleted;
+            DB.Profiles.Update(Profile);
+            await DB.SaveChangesAsync();
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     bool ProfileExists(int profileid)

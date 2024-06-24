@@ -19,7 +19,9 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
     <InputText @bind-Value="Profile.DisplayName" placeholder="Display name" />
+    <label>Height:</label>
     <InputNumber @bind-Value="Profile.Height" placeholder="Height" />
+    <label>Weight:</label>
     <InputNumber @bind-Value="Profile.Weight" placeholder="Weight" />
     <label for="profilePicture">Upload Profile Picture:</label>
     <InputFile OnChange="OnInputFileChange" />
@@ -61,7 +63,7 @@
         <InputRadio Value="false" /> Female
     </InputRadioGroup>
 
-    <button type="submit">Create Profile</button>
+    <button class="bg-blue-500 text-white p-4 rounded-full text-2xl" type="submit">Create Profile</button>
 </EditForm>
 
 

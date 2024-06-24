@@ -16,10 +16,12 @@ namespace BlazorApp.Services
             _context = context;
             _authHelperService = authHelperService;
         }
+
         public async Task<List<Profile>> GetProfilesWithCitiesAsync()
         {
             return await _context.Profiles.Include(p => p.City).Where(p => !p.IsDeleted).ToListAsync();
         }
+
         public async Task AddProfileAsync(Profile profile)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -32,21 +34,23 @@ namespace BlazorApp.Services
                     await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Profiles OFF");
                     await transaction.CommitAsync();
                 }
-                catch
+                catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
-                    throw;
+                    throw ex;
                 }
             }
         }
+
         public async Task UpdateProfileAsync(Profile profile)
         {
             _context.Profiles.Update(profile);
             await _context.SaveChangesAsync();
         }
+
         public async Task SaveImageToDatabase(string base64Image)
         {
-            var account = await _authHelperService.GetAuthenticatedAccountAsync();
+            var account = await GetAuthenticatedAccountAsync();
             if (account != null)
             {
                 var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
@@ -57,9 +61,10 @@ namespace BlazorApp.Services
                 }
             }
         }
+
         public async Task<Profile> GetProfileAsync()
         {
-            var account = await _authHelperService.GetAuthenticatedAccountAsync();
+            var account = await GetAuthenticatedAccountAsync();
             if (account != null)
             {
                 return await _context.Profiles.Include(p => p.City).FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
@@ -72,15 +77,15 @@ namespace BlazorApp.Services
         {
             return await _context.Profiles.FindAsync(profileId);
         }
+
         public async Task<Profile> GetProfileByAccountIdAsync(int accountId)
         {
             return await _context.Profiles.FirstOrDefaultAsync(p => p.AccountId == accountId);
         }
 
-
         public async Task<List<Profile>> GetProfilesAsync()
         {
-            var account = await _authHelperService.GetAuthenticatedAccountAsync();
+            var account = await GetAuthenticatedAccountAsync();
             if (account != null)
             {
                 var currentUserProfile = await GetProfileByAccountIdAsync(account.AccountId);
@@ -119,7 +124,7 @@ namespace BlazorApp.Services
 
         public async Task LikeProfileAsync(int profileId)
         {
-            var account = await _authHelperService.GetAuthenticatedAccountAsync();
+            var account = await GetAuthenticatedAccountAsync();
             if (account != null)
             {
                 var existingLike = await _context.Likes
@@ -151,7 +156,7 @@ namespace BlazorApp.Services
 
         public async Task DislikeProfileAsync(int profileId)
         {
-            var account = await _authHelperService.GetAuthenticatedAccountAsync();
+            var account = await GetAuthenticatedAccountAsync();
             if (account != null)
             {
                 var like = await _context.Likes.FirstOrDefaultAsync(l => l.SenderId == account.AccountId && l.ReceiverId == profileId);
@@ -178,6 +183,11 @@ namespace BlazorApp.Services
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        private async Task<Account> GetAuthenticatedAccountAsync()
+        {
+            return await _authHelperService.GetAuthenticatedAccountAsync();
         }
     }
 }

@@ -71,30 +71,35 @@
 
     public async Task DeleteAccount()
     {
-        var profile = await DB.Profiles.FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
-        if (profile != null)
+        using var transaction = await DB.Database.BeginTransactionAsync();
+        try
         {
-            // Delete related Likes where the profile is the receiver
-            var likesAsReceiver = await DB.Likes.Where(l => l.ReceiverId == profile.ProfileId).ToListAsync();
-            DB.Likes.RemoveRange(likesAsReceiver);
+            var profile = await DB.Profiles.FirstOrDefaultAsync(p => p.AccountId == account.AccountId);
+            if (profile != null)
+            {
+                var likes = await DB.Likes
+                    .Where(l => l.ReceiverId == profile.ProfileId || l.SenderId == profile.ProfileId)
+                    .ToListAsync();
+                DB.Likes.RemoveRange(likes);
 
-            // Delete related Likes where the profile is the sender
-            var likesAsSender = await DB.Likes.Where(l => l.SenderId == profile.ProfileId).ToListAsync();
-            DB.Likes.RemoveRange(likesAsSender);
+                var messages = await DB.Messages
+                    .Where(m => m.ReceiverId == profile.ProfileId || m.SenderId == profile.ProfileId)
+                    .ToListAsync();
+                DB.Messages.RemoveRange(messages);
 
-            // Delete related Messages where the profile is the receiver
-            var messagesAsReceiver = await DB.Messages.Where(m => m.ReceiverId == profile.ProfileId).ToListAsync();
-            DB.Messages.RemoveRange(messagesAsReceiver);
+                DB.Profiles.Remove(profile);
+            }
 
-            // Delete related Messages where the profile is the sender
-            var messagesAsSender = await DB.Messages.Where(m => m.SenderId == profile.ProfileId).ToListAsync();
-            DB.Messages.RemoveRange(messagesAsSender);
-
-            DB.Profiles.Remove(profile);
+            DB.Accounts.Remove(account!);
+            await DB.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
         }
 
-        DB.Accounts.Remove(account!);
-        await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/accounts");
     }
 }

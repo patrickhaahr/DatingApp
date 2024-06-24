@@ -164,6 +164,12 @@ else
 
     public async Task UpdateProfile()
     {
+        if (!ProfileExists(Profile!.ProfileId))
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
         DB.Attach(Profile!).State = EntityState.Modified;
 
         try
@@ -172,14 +178,7 @@ else
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!ProfileExists(Profile!.ProfileId))
-            {
-                NavigationManager.NavigateTo("notfound");
-            }
-            else
-            {
-                throw;
-            }
+            throw;
         }
 
         NavigationManager.NavigateTo("/");

@@ -1,5 +1,6 @@
 # BlazorApp
 
+![dating](https://github.com/user-attachments/assets/fe7c8962-ac2c-4a11-9b38-b962fc0d9d5c)
 BlazorApp is a web application built using Blazor and Entity Framework Core. It is designed to be a dating application where users can create profiles, like or dislike other profiles, and send messages.
 
 ## Features
